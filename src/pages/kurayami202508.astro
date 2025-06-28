@@ -6,8 +6,16 @@ import yamiIcon from '../assets/images/kurayami202508/yami_icon.jpg';
 import harukiIcon from '../assets/images/kurayami202508/haruki_icon.png';
 import furenIcon from '../assets/images/kurayami202508/furen_icon.jpg';
 import coolIcon from '../assets/images/kurayami202508/cool_icon.jpg';
+import konohaIcon from '../assets/images/kurayami202508/konoha_icon.png';
 const eventName = "くらやみ杯";
 const eventDate = "2025年8月3日(日) 20:30 開始";
+const timetable = [
+  { time: '20:00', event: '運営配信開始（ルール説明、チーム紹介、賞品紹介）' },
+  { time: '20:30', event: '予選リーグ開始' },
+  { time: '22:00', event: '決勝トーナメント開始' },
+  { time: '23:30', event: '試合終了・表彰' },
+  { time: '24:00', event: '全プログラム終了' },
+];
 
 // ステージリスト
 const stages = [
@@ -50,7 +58,19 @@ const stages = [
 
       <section id="overview">
         <h2 class="text-4xl font-bold text-center text-purple-400 mb-8">大会概要</h2>
-        <div class="bg-gray-800/50 backdrop-blur-sm p-8 rounded-lg border border-gray-700 space-y-6">
+		<div class="bg-gray-800/50 backdrop-blur-sm p-8 rounded-lg border border-gray-700 space-y-6">
+          <div>
+            <h3 class="font-bold text-white">【任天堂大会ガイドライン】</h3>
+            <p class="mt-2 text-gray-300">
+              この大会は、任天堂の協賛・提携を受けたものではありません。
+            </p>
+            <p class="mt-2 text-sm text-gray-400 break-all">
+              コミュニティ大会への出場および観戦に関する規約 :<br>
+              <a href="https://www.nintendo.co.jp/tournament_guideline/index.html" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:underline">
+                https://www.nintendo.co.jp/tournament_guideline/index.html
+              </a>
+            </p>
+          </div>
           <div>
             <h3 class="text-2xl font-bold text-white">対戦ルール</h3>
             <p class="text-xl mt-2">ガチヤグラ</p>
@@ -63,35 +83,63 @@ const stages = [
               ))}
             </div>
           </div>
+          <div class="max-w-3xl">
+            <h3 class="text-2xl font-bold text-white py-3">タイムテーブル</h3>
+            <div class="relative border-l-2 border-purple-500/30 pl-8 space-y-10">
+              {timetable.map(item => (
+                <div class="relative">
+                  <div class="absolute -left-[42px] top-1.5 w-4 h-4 bg-purple-600 rounded-full border-4 border-gray-900"></div>
+ 
+                  <p class="text-xl font-bold text-white font-rajdhani">{item.time}</p>
+ 
+                  <p class="mt-1 text-gray-300">{item.event}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        <p class="text-center text-sm text-gray-500 mt-8">
+          ※実際の試合進行に合わせて前後します。<br class="md:hidden">当日は大会discordをご確認ください。
+        </p>
         </div>
+
       </section>
 
       <section id="prizes">
         <h2 class="text-4xl font-bold text-center text-purple-400 mb-8">賞品</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-8">
           <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-lg border border-gray-700">
             <h3 class="text-2xl font-bold text-white mb-4">チーム賞</h3>
             <div class="space-y-4">
               <div>
-                <h4 class="text-xl font-bold text-purple-300">優勝チーム</h4>
-                <p class="text-gray-300 mt-1">イラスト制作: ふーれん様</p>
+                <h4 class="text-xl font-bold text-purple-300">優勝</h4>
+                <ul class="list-disc list-inside mt-2 space-y-2 marker:text-purple-400 text-gray-300">
+				<li>チーム4人のオリジナルイラスト</li>
+				</ul>
               </div>
               <div>
                 <h4 class="text-xl font-bold text-purple-300">がんばったで賞</h4>
-                <p class="text-gray-300 mt-1">運営の独断で一番頑張ったと思うチームに進呈<br>イラスト制作: 999ool様</p>
+                <ul class="list-disc list-inside mt-2 space-y-2 marker:text-purple-400 text-gray-300">
+					<li>チーム4人のオリジナルミニイラスト</li>
+				</ul>
+				<p class="text-gray-300 mt-1">※運営の独断で一番頑張ったと思うチームに進呈</p>
               </div>
             </div>
-          </div>
-          <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-lg border border-gray-700">
-            <h3 class="text-2xl font-bold text-white mb-4">個人賞</h3>
-            <div class="space-y-4">
-              <div>
-                <h4 class="text-xl font-bold text-purple-300">ストリーマー賞</h4>
-                <p class="text-gray-300 mt-1">特に配信枠が盛り上がっていた1名に進呈<br>イラスト提供: (後日発表)</p>
-              </div>
+            <h3 class="text-2xl mt-5 font-bold text-white mb-4">個人賞</h3>
+			<div class="space-y-4">
               <div>
                 <h4 class="text-xl font-bold text-purple-300">ファッション賞</h4>
-                <p class="text-gray-300 mt-1">主催者のお眼鏡にかなった1名に進呈<br>イラスト提供: (後日発表)</p>
+                <ul class="list-disc list-inside mt-2 space-y-2 marker:text-purple-400 text-gray-300">
+				<li>オリジナルイラスト</li>
+                </ul>
+                <p class="text-gray-300 mt-1">※主催者のお眼鏡にかなった1名に進呈</p>
+              </div>
+
+              <div>
+				  <h4 class="text-xl font-bold text-purple-300"><!--ストリーマー-->???賞</h4>
+                <ul class="list-disc list-inside mt-2 space-y-2 marker:text-purple-400 text-gray-300">
+					<li class="text-gray-300 mt-1">※後日公開</li>
+				</ul>
+				<!-- <p class="text-gray-300 mt-1">※特に配信枠が盛り上がっていた1名に進呈</p>-->
               </div>
             </div>
           </div>
@@ -111,33 +159,34 @@ const stages = [
               </svg></a></p></div></li>
 			  <li class="flex items-center gap-4"><img src={harukiIcon.src} class="w-14 h-14 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">解説</span><p class="font-bold text-lg">神楽悠姫<a href="https://x.com/camilaharuki" class="inline-flex" target="_blank">@camilaharuki <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-              </svg></p></div></li>
+						  </svg></a></p></div></li>
               </ul>
             </div>
             <div>
               <h3 class="text-2xl font-bold text-white mb-4">イラストレーター</h3>
               <ul class="space-y-3">
 				  <li class="flex items-center gap-4">
-<img src={furenIcon.src} class="w-10 h-10 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">優勝賞品担当</span><p class="font-bold text-lg">ふーれん<a href="https://x.com/fu_renXP" class="inline-flex" target="_blank">@fu_renXP <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+<img src={furenIcon.src} class="w-14 h-14 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">優勝賞品担当</span><p class="font-bold text-lg">ふーれん<a href="https://x.com/fu_renXP" class="inline-flex" target="_blank">@fu_renXP <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
               </svg></a></p></div>
 				  </li>
 				  <li class="flex items-center gap-4">
-<img src={coolIcon.src} class="w-10 h-10 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">がんばったで賞担当</span><p class="font-bold text-lg">くぅる<a href="https://x.com/999ool" class="inline-flex" target="_blank">@999ool <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+<img src={coolIcon.src} class="w-14 h-14 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">がんばったで賞担当</span><p class="font-bold text-lg">くぅる<a href="https://x.com/999ool" class="inline-flex" target="_blank">@999ool <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
               </svg></a></p></div>
 				  </li>
 				  <li class="flex items-center gap-4">
-<img src="" class="w-10 h-10 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">ストリーマー賞担当</span><p class="font-bold text-lg">後日発表<a href="https://x.com/" class="inline-flex" target="_blank">@ <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+					  <img src={konohaIcon.src} class="w-14 h-14 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">ファッション賞担当</span><p class="font-bold text-lg">文月このは<a href="https://x.com/kono_july" class="inline-flex" target="_blank">@kono_july<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
               </svg></a></p></div>
 				  </li>
+				  <!--
 				  <li class="flex items-center gap-4">
-<img src="" class="w-10 h-10 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">ファッション賞担当</span><p class="font-bold text-lg">後日発表<a href="https://x.com/" class="inline-flex" target="_blank">@ <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+<img src="" class="w-14 h-14 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">ストリーマー賞担当</span><p class="font-bold text-lg">後日発表<a href="https://x.com/" class="inline-flex" target="_blank">@ <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
               </svg></a></p></div>
 				  </li>
-
+				  -->
               </ul>
             </div>
           </div>
@@ -160,14 +209,14 @@ const stages = [
           <div>
             <h3 class="text-2xl font-bold text-white">配信について</h3>
             <ul class="list-disc list-inside mt-2 space-y-2 marker:text-purple-400 text-gray-300">
-                <li>各チーム1名以上の配信をお願いします（トラブル対応、円滑な進行のため）。</li>
+                <li>各チーム1名以上の配信をお願いします（トラブル対応、円滑な進行のため。難しい場合は運営にご相談ください）。</li>
                 <li>他メンバーの配信は必須ではありませんが、個人賞の表彰対象となるため配信を推奨します。</li>
                 <li>各自の配信において、試合のインターバルに大会運営枠の映像・音声を取り込むこと（同時視聴）を認めます。</li>
             </ul>
           </div>
           <div>
             <h3 class="text-2xl font-bold text-white">禁止事項</h3>
-            <p class="mt-2 text-gray-300">該当行為があった場合、運営の判断により失格とする場合があります。</p>
+            <p class="mt-2 text-gray-300">該当行為があった場合、運営の判断により失格とすることがあります。</p>
             <ul class="list-disc list-inside mt-2 space-y-2 marker:text-purple-400 text-gray-300">
               <li>プレイヤーとしてモラルに欠ける行為（煽り、暴言、遅延行為、ゴースティングなど）</li>
               <li>ゲームシステムの悪用（グリッチ、チートなど）</li>
