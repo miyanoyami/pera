@@ -4,6 +4,8 @@ import '../styles/global.css'
 import kurayamiLogo from '../assets/images/kurayami202508/logo.png';
 import yamiIcon from '../assets/images/kurayami202508/yami_icon.jpg';
 import harukiIcon from '../assets/images/kurayami202508/haruki_icon.png';
+import furenIcon from '../assets/images/kurayami202508/furen_icon.jpg';
+import coolIcon from '../assets/images/kurayami202508/cool_icon.jpg';
 const eventName = "くらやみ杯";
 const eventDate = "2025年8月3日(日) 20:30 開始";
 
@@ -72,11 +74,11 @@ const stages = [
             <div class="space-y-4">
               <div>
                 <h4 class="text-xl font-bold text-purple-300">優勝チーム</h4>
-                <p class="text-gray-300 mt-1">イラスト提供: ふーれん様</p>
+                <p class="text-gray-300 mt-1">イラスト制作: ふーれん様</p>
               </div>
               <div>
                 <h4 class="text-xl font-bold text-purple-300">がんばったで賞</h4>
-                <p class="text-gray-300 mt-1">運営の独断で一番頑張ったと思うチームに進呈<br>イラスト提供: 999ool様</p>
+                <p class="text-gray-300 mt-1">運営の独断で一番頑張ったと思うチームに進呈<br>イラスト制作: 999ool様</p>
               </div>
             </div>
           </div>
@@ -103,7 +105,8 @@ const stages = [
             <div>
               <h3 class="text-2xl font-bold text-white mb-4">運営</h3>
               <ul class="space-y-3">
-				  <li class="flex items-center gap-4"><img src={yamiIcon.src} class="w-14 h-14 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">主催</span><p class="font-bold text-lg">宮乃やみ<a href="https://x.com/miyanoyami83" class="inline-flex" target="_blank">@miyanoyami83 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+				  <li class="flex items-center gap-4">
+								  <img src={yamiIcon.src} class="w-14 h-14 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">主催</span><p class="font-bold text-lg">宮乃やみ<a href="https://x.com/miyanoyami83" class="inline-flex" target="_blank">@miyanoyami83 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
               </svg></a></p></div></li>
 			  <li class="flex items-center gap-4"><img src={harukiIcon.src} class="w-14 h-14 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">解説</span><p class="font-bold text-lg">神楽悠姫<a href="https://x.com/camilaharuki" class="inline-flex" target="_blank">@camilaharuki <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
@@ -112,12 +115,29 @@ const stages = [
               </ul>
             </div>
             <div>
-              <h3 class="text-2xl font-bold text-white mb-4">賞品担当イラストレーター</h3>
+              <h3 class="text-2xl font-bold text-white mb-4">イラストレーター</h3>
               <ul class="space-y-3">
-                <li><span class="text-gray-400 text-sm">優勝</span><p class="font-bold text-lg">ふーれん</p></li>
-                <li><span class="text-gray-400 text-sm">がんばったで賞</span><p class="font-bold text-lg">999ool</p></li>
-                <li><span class="text-gray-400 text-sm">ストリーマー賞</span><p class="font-bold text-lg">（後日発表）</p></li>
-                <li><span class="text-gray-400 text-sm">ファッション賞</span><p class="font-bold text-lg">（後日発表）</p></li>
+				  <li class="flex items-center gap-4">
+<img src={furenIcon.src} class="w-10 h-10 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">優勝賞品担当</span><p class="font-bold text-lg">ふーれん<a href="https://x.com/fu_renXP" class="inline-flex" target="_blank">@fu_renXP <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+              </svg></a></p></div>
+				  </li>
+				  <li class="flex items-center gap-4">
+<img src={coolIcon.src} class="w-10 h-10 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">がんばったで賞担当</span><p class="font-bold text-lg">くぅる<a href="https://x.com/999ool" class="inline-flex" target="_blank">@999ool <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+              </svg></a></p></div>
+				  </li>
+				  <li class="flex items-center gap-4">
+<img src="" class="w-10 h-10 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">ストリーマー賞担当</span><p class="font-bold text-lg">後日発表<a href="https://x.com/" class="inline-flex" target="_blank">@ <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+              </svg></a></p></div>
+				  </li>
+				  <li class="flex items-center gap-4">
+<img src="" class="w-10 h-10 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">ファッション賞担当</span><p class="font-bold text-lg">後日発表<a href="https://x.com/" class="inline-flex" target="_blank">@ <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+              </svg></a></p></div>
+				  </li>
+
               </ul>
             </div>
           </div>
