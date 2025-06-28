@@ -1,6 +1,9 @@
 ---
 // src/pages/index.astro
 import '../styles/global.css'
+import kurayamiLogo from '../assets/images/kurayami202508/logo.png';
+import yamiIcon from '../assets/images/kurayami202508/yami_icon.jpg';
+import harukiIcon from '../assets/images/kurayami202508/haruki_icon.png';
 const eventName = "くらやみ杯";
 const eventDate = "2025年8月3日(日) 20:30 開始";
 
@@ -37,7 +40,7 @@ const stages = [
   <div class="container mx-auto px-4 md:px-6 py-12">
 
     <header class="text-center py-16 border-b-2 border-purple-600/50">
-		<img src="/images/kurayami202508/logo.png" alt="くらやみ杯 ロゴ" class="mx-auto mb-6 h-32 w-128 object-contain">
+		<img src={kurayamiLogo.src} alt="くらやみ杯 ロゴ" class="mx-auto mb-6 h-32 w-128 object-contain">
       <p class="font-rajdhani text-2xl mt-4 text-gray-300">{eventDate}</p>
     </header>
 
@@ -100,10 +103,10 @@ const stages = [
             <div>
               <h3 class="text-2xl font-bold text-white mb-4">運営</h3>
               <ul class="space-y-3">
-				  <li class="flex items-center gap-4"><img src="/images/kurayami202508/yami_icon.jpg" class="w-14 h-14 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">主催</span><p class="font-bold text-lg">宮乃やみ<a href="https://x.com/miyanoyami83" class="inline-flex" target="_blank">@miyanoyami83 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+				  <li class="flex items-center gap-4"><img src={yamiIcon.src} class="w-14 h-14 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">主催</span><p class="font-bold text-lg">宮乃やみ<a href="https://x.com/miyanoyami83" class="inline-flex" target="_blank">@miyanoyami83 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
               </svg></a></p></div></li>
-				  <li class="flex items-center gap-4"><img src="/images/kurayami202508/haruki_icon.png" class="w-14 h-14 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">解説</span><p class="font-bold text-lg">神楽悠姫<a href="https://x.com/camilaharuki" class="inline-flex" target="_blank">@camilaharuki <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+			  <li class="flex items-center gap-4"><img src={harukiIcon.src} class="w-14 h-14 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">解説</span><p class="font-bold text-lg">神楽悠姫<a href="https://x.com/camilaharuki" class="inline-flex" target="_blank">@camilaharuki <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
               </svg></p></div></li>
               </ul>
