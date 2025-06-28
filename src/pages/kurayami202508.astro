@@ -1,0 +1,204 @@
+---
+// src/pages/index.astro
+import './src/styles/global.css'
+const eventName = "くらやみ杯";
+const eventDate = "2025年8月3日(日) 20:30 開始";
+
+// ステージリスト
+const stages = [
+  "ネギトロ炭鉱", "海女美術大学", "ヤガラ市場", "ヒラメが丘団地",
+  "ザトウマーケット", "カジキ空港", "タカアシ経済特区", "ゴンズイ地区"
+];
+---
+
+<html lang="ja" class="dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{eventName} - Splatoon Community Tournament</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+
+    <style is:global>
+      body {
+        font-family: 'Noto Sans JP', sans-serif;
+        background-color: #313847; /* bg-gray-900 */
+        background-size: 2rem 2rem;
+      }
+      h1, h2, h3, h4, h5, h6, .font-rajdhani {
+        font-family: 'Rajdhani', sans-serif;
+      }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+  <div class="container mx-auto px-4 md:px-6 py-12">
+
+    <header class="text-center py-16 border-b-2 border-purple-600/50">
+		<img src="/images/kurayami202508/logo.png" alt="くらやみ杯 ロゴ" class="mx-auto mb-6 h-32 w-128 object-contain">
+      <p class="font-rajdhani text-2xl mt-4 text-gray-300">{eventDate}</p>
+    </header>
+
+    <main class="mt-16 space-y-20">
+
+      <section id="overview">
+        <h2 class="text-4xl font-bold text-center text-purple-400 mb-8">大会概要</h2>
+        <div class="bg-gray-800/50 backdrop-blur-sm p-8 rounded-lg border border-gray-700 space-y-6">
+          <div>
+            <h3 class="text-2xl font-bold text-white">対戦ルール</h3>
+            <p class="text-xl mt-2">ガチヤグラ</p>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-white">ステージ</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-x-4 gap-y-2 mt-2">
+              {stages.map(stage => (
+                <span class="bg-gray-700/50 text-center py-2 px-3 rounded-md">{stage}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="prizes">
+        <h2 class="text-4xl font-bold text-center text-purple-400 mb-8">賞品</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-lg border border-gray-700">
+            <h3 class="text-2xl font-bold text-white mb-4">チーム賞</h3>
+            <div class="space-y-4">
+              <div>
+                <h4 class="text-xl font-bold text-purple-300">優勝チーム</h4>
+                <p class="text-gray-300 mt-1">イラスト提供: ふーれん様</p>
+              </div>
+              <div>
+                <h4 class="text-xl font-bold text-purple-300">がんばったで賞</h4>
+                <p class="text-gray-300 mt-1">運営の独断で一番頑張ったと思うチームに進呈<br>イラスト提供: 999ool様</p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-lg border border-gray-700">
+            <h3 class="text-2xl font-bold text-white mb-4">個人賞</h3>
+            <div class="space-y-4">
+              <div>
+                <h4 class="text-xl font-bold text-purple-300">ストリーマー賞</h4>
+                <p class="text-gray-300 mt-1">特に配信枠が盛り上がっていた1名に進呈<br>イラスト提供: (後日発表)</p>
+              </div>
+              <div>
+                <h4 class="text-xl font-bold text-purple-300">ファッション賞</h4>
+                <p class="text-gray-300 mt-1">主催者のお眼鏡にかなった1名に進呈<br>イラスト提供: (後日発表)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="staff">
+        <h2 class="text-4xl font-bold text-center text-purple-400 mb-8">スタッフ・クリエイター</h2>
+        <div class="bg-gray-800/50 backdrop-blur-sm p-8 rounded-lg border border-gray-700">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h3 class="text-2xl font-bold text-white mb-4">運営</h3>
+              <ul class="space-y-3">
+				  <li class="flex items-center gap-4"><img src="/images/kurayami202508/yami_icon.jpg" class="w-14 h-14 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">主催</span><p class="font-bold text-lg">宮乃やみ<a href="https://x.com/miyanoyami83" class="inline-flex" target="_blank">@miyanoyami83 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+              </svg></a></p></div></li>
+				  <li class="flex items-center gap-4"><img src="/images/kurayami202508/haruki_icon.png" class="w-14 h-14 rounded-full border-2 border-purple-500"><div><span class="text-gray-400 text-sm">解説</span><p class="font-bold text-lg">神楽悠姫<a href="https://x.com/camilaharuki" class="inline-flex" target="_blank">@camilaharuki <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+              </svg></p></div></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold text-white mb-4">賞品担当イラストレーター</h3>
+              <ul class="space-y-3">
+                <li><span class="text-gray-400 text-sm">優勝</span><p class="font-bold text-lg">ふーれん</p></li>
+                <li><span class="text-gray-400 text-sm">がんばったで賞</span><p class="font-bold text-lg">999ool</p></li>
+                <li><span class="text-gray-400 text-sm">ストリーマー賞</span><p class="font-bold text-lg">（後日発表）</p></li>
+                <li><span class="text-gray-400 text-sm">ファッション賞</span><p class="font-bold text-lg">（後日発表）</p></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="terms">
+        <h2 class="text-4xl font-bold text-center text-purple-400 mb-8">大会規約</h2>
+        <div class="bg-gray-800/50 backdrop-blur-sm p-8 rounded-lg border border-gray-700 space-y-6">
+          <div>
+            <h3 class="text-2xl font-bold text-white">参加資格</h3>
+			<p class="mt-2 text-gray-300">
+			詳細は
+				<a href="https://docs.google.com/presentation/d/1rmb-rGhwb4ZbHmQkHuWl24Q7pqXgjxaE2u1UqMtDTwA/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="inline-flex underline font-bold transition-colors">
+				募集資料<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+              </svg>
+			</a> をご確認ください。</p>
+                      </div>
+          <div>
+            <h3 class="text-2xl font-bold text-white">配信について</h3>
+            <ul class="list-disc list-inside mt-2 space-y-2 marker:text-purple-400 text-gray-300">
+                <li>各チーム1名以上の配信をお願いします（トラブル対応、円滑な進行のため）。</li>
+                <li>他メンバーの配信は必須ではありませんが、個人賞の表彰対象となるため配信を推奨します。</li>
+                <li>各自の配信において、試合のインターバルに大会運営枠の映像・音声を取り込むこと（同時視聴）を認めます。</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-white">禁止事項</h3>
+            <p class="mt-2 text-gray-300">該当行為があった場合、運営の判断により失格とする場合があります。</p>
+            <ul class="list-disc list-inside mt-2 space-y-2 marker:text-purple-400 text-gray-300">
+              <li>プレイヤーとしてモラルに欠ける行為（煽り、暴言、遅延行為、ゴースティングなど）</li>
+              <li>ゲームシステムの悪用（グリッチ、チートなど）</li>
+              <li>大会の進行を妨げる行為</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="rules">
+        <h2 class="text-4xl font-bold text-center text-purple-400 mb-8">対戦ルール</h2>
+        <div class="bg-gray-800/50 backdrop-blur-sm p-8 rounded-lg border border-gray-700 space-y-8">
+          <p class="text-center font-bold text-lg bg-purple-900/50 text-purple-200 py-3 rounded-lg">試合の進行にはタイカイサポート(イカリング3)を使用します。</p>
+          <div>
+            <h3 class="text-2xl font-bold text-white">予選・決勝共通ルール</h3>
+            <ul class="mt-4 space-y-3 text-gray-300">
+              <li class="pl-4 border-l-2 border-purple-500"><strong>ギア：</strong> 通常（サブあり）</li>
+              <li class="pl-4 border-l-2 border-purple-500"><strong>ステージ：</strong> おまかせロスト（指定8ステージからおまかせ、使用したステージは再使用しない）</li>
+              <li class="pl-4 border-l-2 border-purple-500"><strong>回線落ちへの対応：</strong><br>
+                  - 開始後30秒以内に落ちた場合: 同一設定で再試合（2回落ちたチームは1敗）<br>
+                  - 30秒を過ぎていた場合: 試合続行
+              </li>
+              <li class="pl-4 border-l-2 border-purple-500"><strong>ラグへの対応：</strong><br>
+                  - 基本的に対応しません。致命的なラグで異議がある場合のみ、本体機能で録画の上Discordで運営に連絡してください。
+              </li>
+            </ul>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h3 class="text-2xl font-bold text-white">予選リーグ</h3>
+              <ul class="list-disc list-inside mt-4 space-y-2 marker:text-purple-400">
+                <li>4ブロックリーグ戦</li>
+                <li>各ブロック2位までが決勝進出</li>
+                <li>2本先取</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold text-white">決勝トーナメント</h3>
+              <ul class="list-disc list-inside mt-4 space-y-2 marker:text-purple-400">
+                <li>8チームトーナメント戦</li>
+                <li>準々決勝・準決勝：2本先取</li>
+                <li>決勝戦：3本先取</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="text-center mt-20 pt-8 border-t-2 border-purple-600/50">
+      <p>&copy; 2025 宮乃やみ All rights reserved.</p>
+    </footer>
+
+  </div>
+</body>
+</html>
