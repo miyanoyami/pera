@@ -32,4 +32,7 @@ npm run build
 npm run preview
 ```
 
+## deploy
+
+main ブランチの src を変更すると GithubActions によって自動でビルド・更新されます。
 
