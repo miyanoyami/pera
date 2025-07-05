@@ -1,0 +1,818 @@
+---
+import '../styles/global.css'
+import timelineData from '../data/timeline.json'
+import videosData from '../data/videos.json'
+import galleryData from '../data/gallery.json'
+import kanariIcon from '../assets/images/centhiver/kanari.jpg'
+import shikimiIcon from '../assets/images/centhiver/shikimi.jpg'
+import coverImage from '../assets/images/centhiver/cover1.png'
+import shikimiVoice from '../assets/audio/centhiver/shikimi-voice-sample.mp3'
+import kanariVoice from '../assets/audio/centhiver/kanari-voice-sample.mp3'
+
+// Helper function to get color classes (Winter theme)
+function getColorClasses(event) {
+  const colorMap = {
+    cyan: {
+      bg: 'bg-gradient-to-r from-blue-100 to-blue-50',
+      text: 'text-blue-600',
+      circle: 'bg-blue-400',
+      card: 'bg-gradient-to-br from-blue-100 to-indigo-200'
+    },
+    pink: {
+      bg: 'bg-gradient-to-r from-purple-100 to-purple-50',
+      text: 'text-purple-600',
+      circle: 'bg-purple-400',
+      card: 'bg-gradient-to-br from-purple-100 to-pink-200'
+    },
+    purple: {
+      bg: 'bg-gradient-to-r from-indigo-100 to-indigo-50',
+      text: 'text-indigo-600',
+      circle: 'bg-indigo-400',
+      card: 'bg-gradient-to-br from-indigo-100 to-purple-200'
+    },
+    gradient: {
+      bg: 'bg-gradient-to-r from-blue-100 via-indigo-50 to-purple-100',
+      text: 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent',
+      circle: 'bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400',
+      card: 'bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-200'
+    }
+  }
+  return colorMap[event.color] || colorMap.cyan
+}
+
+// Helper function to determine positioning
+function getPositioning(index) {
+  return index % 2 === 0 ? 'left' : 'right'
+}
+
+// Get featured YouTube videos
+const featuredYouTubeVideos = videosData.youtubeVideos.filter(video => video.featured)
+
+// Get featured embedded videos
+const featuredEmbeddedVideos = videosData.embeddedVideos.filter(video => video.featured)
+
+// Get featured gallery photos
+const featuredPhotos = galleryData.photoGallery.filter(photo => photo.featured)
+---
+
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/svg+xml" href="/pera/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="generator" content={Astro.generator} />
+  <title>Cent Hiver | VirtualSinger ユニット</title>
+  <meta name="description" content="Cent Hiver（サティルス）は、オオカミメイドVTuber 柊しきみとスーパーエリート社畜天使VTuber 百軒カナリの2人組VTuberユニットです。">
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen relative overflow-x-hidden">
+  <!-- Loading Animation -->
+  <!-- Snowfall Background -->
+  <div id="snowfall" class="fixed inset-0 pointer-events-none z-10">
+    <div class="snowflake">❄</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❄</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❄</div>
+    <div class="snowflake">❅</div>
+  </div>
+
+  <div id="loading-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100">
+    <div class="relative w-full h-full overflow-hidden">
+      <!-- Background Effects -->
+      <div class="absolute inset-0 bg-gradient-to-br from-blue-200/30 via-indigo-200/30 to-purple-200/30"></div>
+      
+      <!-- Animated Particles -->
+      <div class="absolute inset-0">
+        <div class="particle particle-1"></div>
+        <div class="particle particle-2"></div>
+        <div class="particle particle-3"></div>
+        <div class="particle particle-4"></div>
+        <div class="particle particle-5"></div>
+        <div class="particle particle-6"></div>
+      </div>
+      
+      <!-- Main Content -->
+      <div class="relative z-10 flex flex-col items-center justify-center h-full">
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50 border-b border-blue-100/30 opacity-0 transition-opacity duration-1000" id="header">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">
+          Cent Hiver
+        </h1>
+        <nav class="hidden md:flex space-x-6">
+          <a href="#members" class="text-gray-700 hover:text-indigo-500 transition-colors">Members</a>
+          <a href="#timeline" class="text-gray-700 hover:text-purple-500 transition-colors">Timeline</a>
+          <a href="#gallery" class="text-gray-700 hover:text-indigo-500 transition-colors">Gallery</a>
+        </nav>
+        
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-button" class="md:hidden flex flex-col space-y-1 p-2" aria-label="メニューを開く">
+          <span class="w-6 h-0.5 bg-gray-700 transition-all duration-300"></span>
+          <span class="w-6 h-0.5 bg-gray-700 transition-all duration-300"></span>
+          <span class="w-6 h-0.5 bg-gray-700 transition-all duration-300"></span>
+        </button>
+      </div>
+    </div>
+    
+  </header>
+
+  <!-- Mobile Menu (Outside Header) -->
+  <div id="mobile-menu" class="fixed inset-0 bg-black/50 z-60 opacity-0 pointer-events-none transition-opacity duration-300 md:hidden">
+    <div id="mobile-menu-panel" class="fixed top-0 right-0 w-64 h-full bg-white shadow-xl transition-transform duration-300 z-70" style="transform: translateX(100%);">
+      <div class="p-6">
+        <button id="mobile-menu-close" class="absolute top-4 right-4 text-gray-700 hover:text-gray-900 transition-colors" aria-label="メニューを閉じる">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+        
+        <nav class="mt-8 space-y-4">
+          <a href="#members" class="block text-gray-700 hover:text-indigo-500 transition-colors py-2 text-lg border-b border-gray-200">Members</a>
+          <a href="#timeline" class="block text-gray-700 hover:text-purple-500 transition-colors py-2 text-lg border-b border-gray-200">Timeline</a>
+          <a href="#gallery" class="block text-gray-700 hover:text-indigo-500 transition-colors py-2 text-lg border-b border-gray-200">Gallery</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content (Initially Hidden) -->
+  <div id="main-content" class="opacity-0 transition-opacity duration-1000">
+  
+  <!-- Cover Image Section -->
+  <section class="relative h-96 overflow-hidden">
+    <div class="absolute inset-0">
+      <img src={coverImage.src} alt="Cent Hiver Cover" class="w-full h-full object-cover animate-cover-reveal" />
+      <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40"></div>
+    </div>
+    <div class="relative z-10 flex items-end h-full">
+      <div class="max-w-6xl mx-auto px-4 pb-8">
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Hero Section -->
+  <section class="relative py-20 px-4">
+    <div class="max-w-6xl mx-auto text-center">
+      <div class="mb-8">
+        <h2 class="text-5xl md:text-7xl font-bold mb-4">
+          <span class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">
+            Cent Hiver
+          </span>
+        </h2>
+        <p class="text-xl md:text-2xl text-gray-600 mb-2">サティルス</p>
+        <p class="text-lg text-gray-500">2人組VTuberユニット</p>
+      </div>
+      
+      <div class="flex justify-center space-x-8 mb-12">
+        <div class="w-32 h-32 rounded-full overflow-hidden shadow-lg border-4 border-white">
+          <img src={shikimiIcon.src} alt="柊しきみ" class="w-full h-full object-cover" />
+        </div>
+        <div class="w-32 h-32 rounded-full overflow-hidden shadow-lg border-4 border-white">
+          <img src={kanariIcon.src} alt="百軒カナリ" class="w-full h-full object-cover" />
+        </div>
+      </div>
+      
+      <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+        オオカミメイドVTuber 柊しきみとスーパーエリート社畜天使VTuber 百軒カナリのユニット。
+        心温まる2人組VTuberユニットの音楽をお届けします。
+      </p>
+    </div>
+  </section>
+
+
+  <!-- Members Section -->
+  <section id="members" class="py-20 px-4">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+        Members
+      </h2>
+      
+      <div class="grid md:grid-cols-2 gap-16">
+        <!-- Member 1 -->
+        <div class="relative">
+          <div class="bg-gradient-to-br from-cyan-100 to-cyan-50 rounded-3xl p-8 shadow-lg">
+            <div class="flex flex-col items-center text-center">
+              <div class="w-48 h-48 rounded-full overflow-hidden mb-6 shadow-lg border-4 border-white">
+                <img src={shikimiIcon.src} alt="柊しきみ" class="w-full h-full object-cover" />
+              </div>
+              <h3 class="text-3xl font-bold text-cyan-600 mb-2">柊しきみ</h3>
+              <p class="text-lg text-cyan-500 mb-4">オオカミメイドVTuber</p>
+              <div class="space-y-3 text-gray-700">
+                <div class="bg-white/70 backdrop-blur-sm p-4 rounded-lg">
+                  <p class="text-sm">オオカミの耳と尻尾を持つメイド。普段は丁寧で上品な話し方をするが、時々オオカミらしい野性的な一面も見せる。真面目で責任感が強く、完璧主義者。</p>
+                </div>
+                <div class="bg-white/70 backdrop-blur-sm p-4 rounded-lg">
+                  <h4 class="font-bold text-cyan-600 mb-2">歌声の特徴</h4>
+                  <p class="text-sm mb-3">かわいらしくて透明感のある歌声。聴く人の心を癒す優しい歌声で、バラードや落ち着いた楽曲が得意。メイドらしい丁寧な歌唱が魅力。</p>
+                  <div class="bg-cyan-50 p-3 rounded-lg">
+                    <p class="text-xs text-cyan-600 mb-2 font-medium">ボイスサンプル</p>
+                    <audio controls class="w-full min-h-8 bg-white rounded" preload="auto" id="shikimi-audio" src={shikimiVoice}>
+                      お使いのブラウザは音声ファイルに対応していません。
+                    </audio>
+                  </div>
+                </div>
+                <div class="bg-white/70 backdrop-blur-sm p-4 rounded-lg">
+                  <h4 class="font-bold text-cyan-600 mb-2">趣味・特技</h4>
+                  <p class="text-sm">お掃除、料理、読書、月夜の散歩</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Member 2 -->
+        <div class="relative">
+          <div class="bg-gradient-to-br from-pink-100 to-pink-50 rounded-3xl p-8 shadow-lg">
+            <div class="flex flex-col items-center text-center">
+              <div class="w-48 h-48 rounded-full overflow-hidden mb-6 shadow-lg border-4 border-white">
+                <img src={kanariIcon.src} alt="百軒カナリ" class="w-full h-full object-cover" />
+              </div>
+              <h3 class="text-3xl font-bold text-pink-600 mb-2">百軒カナリ</h3>
+              <p class="text-lg text-pink-500 mb-4">歌うスーパーエリート社畜天使VTuber</p>
+              <div class="space-y-3 text-gray-700">
+                <div class="bg-white/70 backdrop-blur-sm p-4 rounded-lg">
+                  <p class="text-sm">天使でありながら現代社会で働く社畜。エリートとしてのプライドを持ちながらも、社畜の辛さを嘆くギャップが魅力。明るく前向きな性格で、どんな困難も歌で乗り越える。</p>
+                </div>
+                <div class="bg-white/70 backdrop-blur-sm p-4 rounded-lg">
+                  <h4 class="font-bold text-pink-600 mb-2">歌声の特徴</h4>
+                  <p class="text-sm mb-3">パワフルで力強い歌声が持ち味。社畜の魂を込めた情熱的な歌唱で聴く人を魅了する。アップテンポな楽曲やロック調の楽曲が得意。</p>
+                  <div class="bg-pink-50 p-3 rounded-lg">
+                    <p class="text-xs text-pink-600 mb-2 font-medium">ボイスサンプル</p>
+                    <audio controls class="w-full min-h-8 bg-white rounded" preload="auto" id="kanari-audio" src={kanariVoice}>
+                      お使いのブラウザは音声ファイルに対応していません。
+                    </audio>
+                  </div>
+                </div>
+                <div class="bg-white/70 backdrop-blur-sm p-4 rounded-lg">
+                  <h4 class="font-bold text-pink-600 mb-2">趣味・特技</h4>
+                  <p class="text-sm">残業、資料作成、カラオケ、エナジードリンク収集</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline Section -->
+  <section id="timeline" class="py-20 px-4 bg-white/50">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+        Timeline
+      </h2>
+      
+      <div class="flex">
+        <!-- Left Timeline Bar -->
+        <div class="w-4 flex-shrink-0 relative">
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-400 via-indigo-400 to-purple-400 rounded-full"></div>
+        </div>
+        
+        <!-- Right Content Area -->
+        <div class="flex-1 pl-8">
+          <div class="space-y-4">
+            {timelineData.timeline.map((event, index) => {
+              const colors = getColorClasses(event)
+              return (
+                <div class={`group hover:translate-x-2 transition-transform duration-200 ${event.highlight ? 'relative' : ''}`}>
+                  {event.highlight && (
+                    <div class="absolute -inset-2 bg-gradient-to-r from-blue-500/5 via-indigo-500/5 to-purple-500/5 rounded-lg"></div>
+                  )}
+                  <div class={`relative ${event.highlight ? 'bg-gradient-to-r from-blue-50/50 to-purple-50/50' : ''} pl-6 py-3 hover:bg-white/30 transition-colors duration-200`}>
+                    <div class="flex items-baseline justify-between">
+                      <div class="flex-1">
+                        <div class={`text-sm font-medium ${colors.text} mb-1`}>
+                          {event.date}
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 leading-tight">{event.title}</h3>
+                      </div>
+                      {event.current && (
+                        <div class="ml-4">
+                          <span class="inline-block w-2 h-2 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full animate-pulse"></span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section id="gallery" class="py-20 px-4 bg-white/50">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+        Gallery & Videos
+      </h2>
+      
+      <!-- YouTube Recommended Videos -->
+      <div class="mb-16">
+        <h3 class="text-2xl font-bold text-center mb-8 text-gray-700">YouTube おすすめ動画</h3>
+        <div class="relative">
+          <!-- Left Scroll Button -->
+          <button id="youtube-scroll-left" class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white/80 hover:bg-white/90 rounded-full p-3 shadow-lg transition-all duration-300">
+            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+          
+          <!-- Right Scroll Button -->
+          <button id="youtube-scroll-right" class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white/80 hover:bg-white/90 rounded-full p-3 shadow-lg transition-all duration-300">
+            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+          
+          <div id="youtube-container" class="overflow-x-auto scrollbar-hide" style="scroll-behavior: smooth;">
+            <div class="flex gap-6 px-4 md:px-0">
+              {featuredYouTubeVideos.map((video) => {
+                const colors = getColorClasses(video)
+                return (
+                  <a href={video.url} target="_blank" class="group flex-none youtube-card">
+                    <div class={`w-80 md:w-72 ${colors.card} rounded-lg overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-300`}>
+                      <div class={`aspect-video ${colors.card} flex items-center justify-center`}>
+                        <div class="text-white">
+                          <svg class="w-16 h-16 mx-auto mb-2" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                          </svg>
+                          <p class="text-sm font-bold">YouTube</p>
+                        </div>
+                      </div>
+                      <div class="p-4">
+                        <h4 class={`font-bold ${colors.text} mb-2`}>{video.title}</h4>
+                      </div>
+                    </div>
+                  </a>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Embedded Videos -->
+      <div class="mb-16">
+        <h3 class="text-2xl font-bold text-center mb-8 text-gray-700">特別映像</h3>
+        <div class="grid md:grid-cols-2 gap-8">
+          {featuredEmbeddedVideos.map((video) => (
+            <div class="bg-white/70 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg">
+              <div class="aspect-video bg-gray-900">
+                <video controls class="w-full h-full object-cover">
+                  <source src={video.videoPath} type="video/mp4">
+                  <p class="text-white p-4">お使いのブラウザは動画再生に対応していません。</p>
+                </video>
+              </div>
+              <div class="p-4">
+                <h4 class="font-bold text-gray-700 mb-2">{video.title}</h4>
+                {video.duration && (
+                  <p class="text-xs text-gray-500 mt-1">時間: {video.duration}</p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      <!-- Photo Gallery -->
+      <div>
+        <h3 class="text-2xl font-bold text-center mb-8 text-gray-700">フォトギャラリー</h3>
+        <div class="grid md:grid-cols-4 gap-4">
+          {featuredPhotos.map((photo) => {
+            const colors = getColorClasses(photo)
+            return (
+              <div class={`aspect-square ${colors.card} rounded-lg flex items-center justify-center hover:shadow-lg transition-shadow cursor-pointer group relative overflow-hidden`}>
+                {/* Placeholder for actual image */}
+                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                  <div class="text-center text-white">
+                    <span class="text-2xl block mb-1">📸</span>
+                    <p class="text-xs opacity-90 px-2">{photo.title}</p>
+                  </div>
+                </div>
+                {/* When images are available, replace with: */}
+                {/* <img src={photo.thumbnail} alt={photo.title} class="w-full h-full object-cover" /> */}
+              </div>
+            )
+          })}
+          
+          {/* Show remaining gallery count if more than 4 featured photos */}
+          {galleryData.photoGallery.length > featuredPhotos.length && (
+            <div class="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center hover:shadow-lg transition-shadow cursor-pointer">
+              <div class="text-center text-gray-600">
+                <span class="text-2xl block mb-1">📂</span>
+                <p class="text-xs">他 {galleryData.photoGallery.length - featuredPhotos.length} 枚</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-12 px-4">
+    <div class="max-w-6xl mx-auto text-center">
+      <h3 class="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">
+        Cent Hiver
+      </h3>
+      <p class="text-gray-400 mb-6">
+        冬の美しさを織りなす2人組VTuberユニット
+      </p>
+      <div class="flex justify-center space-x-6 mb-6">
+        <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">Twitter</a>
+        <a href="#" class="text-indigo-400 hover:text-indigo-300 transition-colors">YouTube</a>
+        <a href="#" class="text-purple-400 hover:text-purple-300 transition-colors">Instagram</a>
+      </div>
+      <p class="text-gray-500 text-sm">
+        © 2024 Cent Hiver. All rights reserved.
+      </p>
+    </div>
+  </footer>
+  </div>
+
+  <style>
+    /* Snowfall Animation */
+    @keyframes snowfall {
+      0% {
+        transform: translateY(-100vh) translateX(0px);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) translateX(100px);
+        opacity: 0;
+      }
+    }
+    
+    .snowflake {
+      position: absolute;
+      top: -10px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.2rem;
+      animation: snowfall linear infinite;
+      user-select: none;
+      pointer-events: none;
+    }
+    
+    .snowflake:nth-child(1) {
+      left: 10%;
+      animation-duration: 8s;
+      animation-delay: 0s;
+    }
+    
+    .snowflake:nth-child(2) {
+      left: 20%;
+      animation-duration: 12s;
+      animation-delay: 2s;
+      font-size: 0.9rem;
+    }
+    
+    .snowflake:nth-child(3) {
+      left: 30%;
+      animation-duration: 10s;
+      animation-delay: 4s;
+      font-size: 1.4rem;
+    }
+    
+    .snowflake:nth-child(4) {
+      left: 40%;
+      animation-duration: 15s;
+      animation-delay: 1s;
+    }
+    
+    .snowflake:nth-child(5) {
+      left: 50%;
+      animation-duration: 11s;
+      animation-delay: 3s;
+      font-size: 1.1rem;
+    }
+    
+    .snowflake:nth-child(6) {
+      left: 60%;
+      animation-duration: 9s;
+      animation-delay: 5s;
+    }
+    
+    .snowflake:nth-child(7) {
+      left: 70%;
+      animation-duration: 13s;
+      animation-delay: 1.5s;
+      font-size: 0.8rem;
+    }
+    
+    .snowflake:nth-child(8) {
+      left: 80%;
+      animation-duration: 14s;
+      animation-delay: 3.5s;
+      font-size: 1.3rem;
+    }
+
+    /* Cover Reveal Animation */
+    @keyframes cover-reveal {
+      0% {
+        filter: blur(20px) brightness(0.3) contrast(0.5);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      50% {
+        filter: blur(10px) brightness(0.6) contrast(0.7);
+      }
+      80% {
+        filter: blur(2px) brightness(0.9) contrast(0.9);
+      }
+      100% {
+        filter: blur(0px) brightness(1) contrast(1);
+        opacity: 1;
+      }
+    }
+    
+    .animate-cover-reveal {
+      animation: cover-reveal 1s ease-out;
+    }
+    
+    /* Hide scrollbar */
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Custom Animations */
+    @keyframes slow-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(-12deg); }
+      50% { transform: translateY(-10px) rotate(-12deg); }
+    }
+    
+    @keyframes float-delay {
+      0%, 100% { transform: translateY(0px) rotate(12deg); }
+      50% { transform: translateY(-8px) rotate(12deg); }
+    }
+    
+    @keyframes title-slide {
+      0% { 
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes subtitle-fade {
+      0% { 
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes loading-bar {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+    
+    @keyframes particle-float {
+      0%, 100% { 
+        transform: translateY(0px) translateX(0px);
+        opacity: 0.3;
+      }
+      50% { 
+        transform: translateY(-20px) translateX(10px);
+        opacity: 0.7;
+      }
+    }
+    
+    .animate-slow-spin {
+      animation: slow-spin 20s linear infinite;
+    }
+    
+    .animate-float {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .animate-float-delay {
+      animation: float-delay 3s ease-in-out infinite;
+      animation-delay: 0.5s;
+    }
+    
+    .animate-title-slide {
+      animation: title-slide 1s ease-out 0.5s both;
+    }
+    
+    .animate-subtitle-fade {
+      animation: subtitle-fade 1s ease-out 1s both;
+    }
+    
+    .animate-subtitle-fade-delay {
+      animation: subtitle-fade 1s ease-out 1.3s both;
+    }
+    
+    .animate-loading-bar {
+      animation: loading-bar 4s ease-in-out;
+    }
+    
+    /* Winter Particles */
+    .particle {
+      position: absolute;
+      background: radial-gradient(circle, rgba(200,220,255,0.8) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: particle-float 6s ease-in-out infinite;
+      box-shadow: 0 0 10px rgba(200,220,255,0.3);
+    }
+    
+    .particle-1 {
+      width: 8px;
+      height: 8px;
+      top: 20%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+    
+    .particle-2 {
+      width: 12px;
+      height: 12px;
+      top: 60%;
+      left: 80%;
+      animation-delay: 1s;
+    }
+    
+    .particle-3 {
+      width: 6px;
+      height: 6px;
+      top: 80%;
+      left: 20%;
+      animation-delay: 2s;
+    }
+    
+    .particle-4 {
+      width: 10px;
+      height: 10px;
+      top: 30%;
+      left: 70%;
+      animation-delay: 3s;
+    }
+    
+    .particle-5 {
+      width: 14px;
+      height: 14px;
+      top: 10%;
+      left: 60%;
+      animation-delay: 4s;
+    }
+    
+    .particle-6 {
+      width: 8px;
+      height: 8px;
+      top: 70%;
+      left: 40%;
+      animation-delay: 5s;
+    }
+  </style>
+
+  <script>
+    // Loading Animation Control
+    window.addEventListener('load', function() {
+      const loadingScreen = document.getElementById('loading-screen');
+      const mainContent = document.getElementById('main-content');
+      
+      // Show loading animation for 4 seconds
+      setTimeout(() => {
+        // Fade out loading screen
+        loadingScreen.style.transition = 'opacity 1s ease-out';
+        loadingScreen.style.opacity = '0';
+        
+        // Show main content
+        mainContent.style.opacity = '1';
+        
+        // Show header
+        const header = document.getElementById('header');
+        header.style.opacity = '1';
+        
+        // Remove loading screen from DOM after transition
+        setTimeout(() => {
+          loadingScreen.style.display = 'none';
+        }, 1000);
+      }, 1000);
+    });
+
+    // Mobile Menu Control
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const mobileMenuClose = document.getElementById('mobile-menu-close');
+      const mobileMenuPanel = document.getElementById('mobile-menu-panel');
+      
+      // Open mobile menu
+      mobileMenuButton.addEventListener('click', function() {
+        mobileMenu.style.pointerEvents = 'auto';
+        mobileMenu.style.opacity = '1';
+        mobileMenuPanel.style.transform = 'translateX(0)';
+        
+        // Add hamburger animation
+        const spans = mobileMenuButton.querySelectorAll('span');
+        spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+      });
+      
+      // Close mobile menu
+      function closeMobileMenu() {
+        mobileMenu.style.opacity = '0';
+        mobileMenuPanel.style.transform = 'translateX(100%)';
+        
+        // Reset hamburger animation
+        const spans = mobileMenuButton.querySelectorAll('span');
+        spans[0].style.transform = 'rotate(0deg) translate(0, 0)';
+        spans[1].style.opacity = '1';
+        spans[2].style.transform = 'rotate(0deg) translate(0, 0)';
+        
+        // Remove pointer events after animation
+        setTimeout(() => {
+          mobileMenu.style.pointerEvents = 'none';
+        }, 300);
+      }
+      
+      mobileMenuClose.addEventListener('click', closeMobileMenu);
+      
+      // Close menu when clicking on overlay
+      mobileMenu.addEventListener('click', function(e) {
+        if (e.target === mobileMenu) {
+          closeMobileMenu();
+        }
+      });
+      
+      // Close menu when clicking on navigation links
+      const mobileNavLinks = mobileMenu.querySelectorAll('nav a');
+      mobileNavLinks.forEach(link => {
+        link.addEventListener('click', closeMobileMenu);
+      });
+
+      // YouTube carousel scroll functionality
+      const youtubeContainer = document.getElementById('youtube-container');
+      const youtubeScrollLeft = document.getElementById('youtube-scroll-left');
+      const youtubeScrollRight = document.getElementById('youtube-scroll-right');
+      
+      if (youtubeContainer && youtubeScrollLeft && youtubeScrollRight) {
+        let currentIndex = 0;
+        const cards = youtubeContainer.querySelectorAll('.youtube-card');
+        const totalCards = cards.length;
+        
+        function getCardWidth() {
+          return cards[0] ? cards[0].offsetWidth + 24 : 320; // card width + gap
+        }
+        
+        function scrollToIndex(index) {
+          const cardWidth = getCardWidth();
+          const scrollPosition = index * cardWidth;
+          youtubeContainer.scrollTo({
+            left: scrollPosition,
+            behavior: 'smooth'
+          });
+        }
+        
+        youtubeScrollLeft.addEventListener('click', function() {
+          currentIndex = currentIndex === 0 ? totalCards - 1 : currentIndex - 1;
+          scrollToIndex(currentIndex);
+        });
+        
+        youtubeScrollRight.addEventListener('click', function() {
+          currentIndex = currentIndex === totalCards - 1 ? 0 : currentIndex + 1;
+          scrollToIndex(currentIndex);
+        });
+      }
+
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+{
+  "photoGallery": [
+    {
+      "id": "profile-shikimi-1",
+      "title": "柊しきみ プロフィール写真",
+      "description": "オオカミメイドとしての魅力が詰まった一枚",
+      "imagePath": "/pera/images/gallery/shikimi-profile-1.jpg",
+      "thumbnail": "/pera/images/gallery/thumbs/shikimi-profile-1.jpg",
+      "member": "shikimi",
+      "color": "cyan",
+      "category": "profile",
+      "featured": true,
+      "uploadDate": "2024-01-15"
+    },
+    {
+      "id": "profile-kanari-1",
+      "title": "百軒カナリ プロフィール写真",
+      "description": "スーパーエリート社畜天使の凛々しい姿",
+      "imagePath": "/pera/images/gallery/kanari-profile-1.jpg",
+      "thumbnail": "/pera/images/gallery/thumbs/kanari-profile-1.jpg",
+      "member": "kanari",
+      "color": "pink",
+      "category": "profile",
+      "featured": true,
+      "uploadDate": "2024-01-15"
+    },
+    {
+      "id": "unit-photo-1",
+      "title": "Cent Hiver ユニット写真",
+      "description": "2人並んだ記念すべき初回ユニット写真",
+      "imagePath": "/pera/images/gallery/unit-photo-1.jpg",
+      "thumbnail": "/pera/images/gallery/thumbs/unit-photo-1.jpg",
+      "member": "both",
+      "color": "purple",
+      "category": "unit",
+      "featured": true,
+      "uploadDate": "2024-01-20"
+    },
+    {
+      "id": "live-photo-1",
+      "title": "配信中の柊しきみ",
+      "description": "配信中の自然な表情を捉えた一枚",
+      "imagePath": "/pera/images/gallery/shikimi-live-1.jpg",
+      "thumbnail": "/pera/images/gallery/thumbs/shikimi-live-1.jpg",
+      "member": "shikimi",
+      "color": "cyan",
+      "category": "live",
+      "uploadDate": "2024-02-10"
+    },
+    {
+      "id": "live-photo-2",
+      "title": "歌唱中の百軒カナリ",
+      "description": "パワフルな歌声を披露する瞬間",
+      "imagePath": "/pera/images/gallery/kanari-singing-1.jpg",
+      "thumbnail": "/pera/images/gallery/thumbs/kanari-singing-1.jpg",
+      "member": "kanari",
+      "color": "pink",
+      "category": "live",
+      "uploadDate": "2024-02-15"
+    },
+    {
+      "id": "recording-1",
+      "title": "レコーディング風景",
+      "description": "Winter Melody制作時のレコーディング風景",
+      "imagePath": "/pera/images/gallery/recording-1.jpg",
+      "thumbnail": "/pera/images/gallery/thumbs/recording-1.jpg",
+      "member": "shikimi",
+      "color": "cyan",
+      "category": "behind",
+      "uploadDate": "2024-03-01"
+    },
+    {
+      "id": "recording-2",
+      "title": "デュエット収録",
+      "description": "Harmony Together収録時の2人",
+      "imagePath": "/pera/images/gallery/recording-duet-1.jpg",
+      "thumbnail": "/pera/images/gallery/thumbs/recording-duet-1.jpg",
+      "member": "both",
+      "color": "purple",
+      "category": "behind",
+      "uploadDate": "2024-08-20"
+    },
+    {
+      "id": "casual-1",
+      "title": "オフショット - 柊しきみ",
+      "description": "配信外での柊しきみのリラックスした表情",
+      "imagePath": "/pera/images/gallery/shikimi-casual-1.jpg",
+      "thumbnail": "/pera/images/gallery/thumbs/shikimi-casual-1.jpg",
+      "member": "shikimi",
+      "color": "cyan",
+      "category": "casual",
+      "uploadDate": "2024-05-12"
+    },
+    {
+      "id": "casual-2",
+      "title": "オフショット - 百軒カナリ",
+      "description": "社畜としての疲れを見せない笑顔",
+      "imagePath": "/pera/images/gallery/kanari-casual-1.jpg",
+      "thumbnail": "/pera/images/gallery/thumbs/kanari-casual-1.jpg",
+      "member": "kanari",
+      "color": "pink",
+      "category": "casual",
+      "uploadDate": "2024-05-15"
+    },
+    {
+      "id": "event-1",
+      "title": "特別イベント写真",
+      "description": "ファンとの交流イベントでの一コマ",
+      "imagePath": "/pera/images/gallery/event-1.jpg",
+      "thumbnail": "/pera/images/gallery/thumbs/event-1.jpg",
+      "member": "both",
+      "color": "purple",
+      "category": "event",
+      "uploadDate": "2024-07-30"
+    },
+    {
+      "id": "anniversary-1",
+      "title": "ユニット結成記念",
+      "description": "結成1周年を記念した特別写真",
+      "imagePath": "/pera/images/gallery/anniversary-1.jpg",
+      "thumbnail": "/pera/images/gallery/thumbs/anniversary-1.jpg",
+      "member": "both",
+      "color": "gradient",
+      "category": "memorial",
+      "featured": true,
+      "uploadDate": "2024-12-01"
+    },
+    {
+      "id": "concept-1",
+      "title": "コンセプトアート風写真",
+      "description": "アーティスティックな雰囲気の柊しきみ",
+      "imagePath": "/pera/images/gallery/shikimi-concept-1.jpg",
+      "thumbnail": "/pera/images/gallery/thumbs/shikimi-concept-1.jpg",
+      "member": "shikimi",
+      "color": "cyan",
+      "category": "artistic",
+      "uploadDate": "2024-09-20"
+    }
+  ],
+  "categories": [
+    {
+      "id": "profile",
+      "name": "プロフィール",
+      "description": "公式プロフィール写真"
+    },
+    {
+      "id": "unit",
+      "name": "ユニット",
+      "description": "2人が写ったユニット写真"
+    },
+    {
+      "id": "live",
+      "name": "配信・ライブ",
+      "description": "配信やライブパフォーマンス中の写真"
+    },
+    {
+      "id": "behind",
+      "name": "ビハインド",
+      "description": "制作現場やバックステージの写真"
+    },
+    {
+      "id": "casual",
+      "name": "オフショット",
+      "description": "カジュアルな日常の一コマ"
+    },
+    {
+      "id": "event",
+      "name": "イベント",
+      "description": "特別なイベントでの写真"
+    },
+    {
+      "id": "memorial",
+      "name": "記念",
+      "description": "重要な節目を記録した写真"
+    },
+    {
+      "id": "artistic",
+      "name": "アーティスティック",
+      "description": "芸術的・コンセプチュアルな写真"
+    }
+  ]
+}
