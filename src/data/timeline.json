@@ -1,0 +1,43 @@
+{
+  "timeline": [
+    {
+      "id": "shikimi-debut",
+      "date": "2022年8月",
+      "title": "柊しきみ デビュー",
+      "color": "cyan"
+    },
+    {
+      "id": "kanari-debut",
+      "date": "2023年9月",
+      "title": "百軒カナリ デビュー",
+      "color": "pink"
+    },
+    {
+      "id": "first-collab",
+      "date": "2023年10月",
+      "title": "「サンドリヨン」カバーで初コラボ",
+      "color": "purple"
+    },
+    {
+      "id": "first-collab",
+      "date": "2023年10月",
+      "title": "「ねぇねぇねぇ。」をカバー",
+      "color": "purple"
+    },
+
+    {
+      "id": "unit-formation",
+      "date": "2024年1月",
+      "title": "Cent Hiver 結成",
+      "color": "gradient",
+      "highlight": true
+    },
+    {
+      "id": "current-activity",
+      "date": "2024年12月 〜 現在",
+      "title": "継続的な活動",
+      "color": "gradient",
+      "current": true
+    }
+  ]
+}

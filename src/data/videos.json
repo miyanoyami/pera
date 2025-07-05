@@ -1,0 +1,78 @@
+{
+  "youtubeVideos": [
+    {
+      "id": "sandoriyon",
+      "title": "サンドリヨン",
+      "url": "https://www.youtube.com/watch?v=3CTDqDBwEFs",
+      "thumbnail": "/pera/images/thumbnails/winter-melody.jpg",
+      "color": "cyan",
+      "releaseDate": "2024-03-15",
+      "featured": true
+    },
+    {
+      "id": "nenene",
+      "title": "ねぇねぇねぇ。",
+      "url": "https://www.youtube.com/watch?v=6CYByF8FZN4",
+      "thumbnail": "/pera/images/thumbnails/spring-dreams.jpg",
+      "color": "pink",
+      "releaseDate": "2024-06-20",
+      "featured": true
+    },
+    {
+      "id": "lower",
+      "title": "ロウワー",
+      "url": "https://www.youtube.com/watch?v=9MSeRZIEMJ4",
+      "thumbnail": "/pera/images/thumbnails/harmony-together.jpg",
+      "color": "purple",
+      "releaseDate": "2024-09-10",
+      "featured": true,
+      "duet": true
+    },
+    {
+      "id": "triangler",
+      "title": "トライアングラー",
+      "url": "https://www.youtube.com/watch?v=uj5q_pgW4zE",
+      "thumbnail": "/pera/images/thumbnails/cover-1.jpg",
+      "color": "cyan",
+      "releaseDate": "2024-04-05",
+      "type": "cover",
+      "featured": true
+    }
+  ],
+  "embeddedVideos": [
+    {
+      "id": "behind-scenes",
+      "title": "Behind the Scenes",
+      "videoPath": "/pera/videos/behind-the-scenes.mp4",
+      "thumbnail": "/pera/images/thumbnails/behind-scenes.jpg",
+      "duration": "5:32",
+      "type": "documentary",
+      "featured": true
+    },
+    {
+      "id": "acoustic-session",
+      "title": "Acoustic Session",
+      "videoPath": "/pera/videos/acoustic-session.mp4",
+      "thumbnail": "/pera/images/thumbnails/acoustic.jpg",
+      "duration": "8:15",
+      "type": "performance",
+      "featured": true
+    },
+    {
+      "id": "unit-formation",
+      "title": "ユニット結成記念映像",
+      "videoPath": "/pera/videos/unit-formation.mp4",
+      "thumbnail": "/pera/images/thumbnails/formation.jpg",
+      "duration": "3:45",
+      "type": "memorial"
+    },
+    {
+      "id": "voice-message",
+      "title": "ファンへのメッセージ",
+      "videoPath": "/pera/videos/fan-message.mp4",
+      "thumbnail": "/pera/images/thumbnails/message.jpg",
+      "duration": "2:18",
+      "type": "message"
+    }
+  ]
+}
