@@ -654,6 +654,7 @@
     const images = ['/src/assets/images/miyanoyami/main.png', '/src/assets/images/miyanoyami/main2.png'];
     let currentIndex = 0;
 
+    // PC用：マウスホバー
     characterImage.addEventListener('mouseenter', () => {
         currentIndex = (currentIndex + 1) % images.length;
         characterImage.src = images[currentIndex];
@@ -662,6 +663,21 @@
     characterImage.addEventListener('mouseleave', () => {
         characterImage.src = images[0];
         currentIndex = 0;
+    });
+    
+    // スマホ・タブレット用：タップ
+    characterImage.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // デフォルトのタッチ動作を防ぐ
+        currentIndex = (currentIndex + 1) % images.length;
+        characterImage.src = images[currentIndex];
+    });
+    
+    // スマホ・タブレット用：タップ終了で元に戻す
+    characterImage.addEventListener('touchend', () => {
+        setTimeout(() => {
+            characterImage.src = images[0];
+            currentIndex = 0;
+        }, 1000); // 1秒後に元の画像に戻す
     });
 
     // Radar Chart for Skills
