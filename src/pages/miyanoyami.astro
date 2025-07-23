@@ -1,4 +1,12 @@
 ---
+import coverImage from '../assets/images/miyanoyami/cover.png';
+import nameLogo from '../assets/images/miyanoyami/name_logo_color.png';
+import mainImage from '../assets/images/miyanoyami/main.png';
+import mainImage2 from '../assets/images/miyanoyami/main2.png';
+import sonovLogo from '../assets/images/miyanoyami/sonov_logo.png';
+import utableLogo from '../assets/images/miyanoyami/utable_logo.svg';
+import logoIcon from '../assets/images/miyanoyami/logo.png';
+
 /* # 設計
  * ## 概要
  * VTuber 宮乃やみの公式サイト。
@@ -51,7 +59,7 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <link rel="icon" type="image/png" href="/src/assets/images/miyanoyami/logo.png" />
+  <link rel="icon" type="image/png" href={logoIcon.src} />
   <meta name="viewport" content="width=device-width" />
   <meta name="generator" content={Astro.generator} />
   <title>宮乃やみ - VTuber公式サイト</title>
@@ -240,10 +248,10 @@
 
       <header class="w-full relative">
         <div class="relative w-full">
-          <img src="/src/assets/images/miyanoyami/cover.png" alt="宮乃やみ" class="w-full h-auto object-cover" style="min-height: 80vh;">
+          <img src={coverImage.src} alt="宮乃やみ" class="w-full h-auto object-cover" style="min-height: 80vh;">
           <div class="absolute inset-0 flex justify-center" style="align-items: flex-end; padding-bottom: 10%;">
             <div class="text-center px-4">
-              <img src="/src/assets/images/miyanoyami/name_logo_color.png" alt="宮乃やみ" class="mx-auto max-w-lg md:max-w-xl lg:max-w-2xl h-auto">
+              <img src={nameLogo.src} alt="宮乃やみ" class="mx-auto max-w-lg md:max-w-xl lg:max-w-2xl h-auto">
             </div>
           </div>
         </div>
@@ -260,7 +268,7 @@
             <div class="relative">
               <div class="absolute inset-0 bg-gradient-to-br from-purple-100 to-pink-100 rounded-3xl transform rotate-3"></div>
               <div class="relative bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-xl">
-                <img id="character-image" src="/src/assets/images/miyanoyami/main.png" alt="宮乃やみ立ち絵" class="w-72 md:w-80 lg:w-88 xl:w-104 h-auto cursor-pointer transition-all duration-300 hover:scale-105 rounded-2xl">
+                <img id="character-image" src={mainImage.src} alt="宮乃やみ立ち絵" class="w-72 md:w-80 lg:w-88 xl:w-104 h-auto cursor-pointer transition-all duration-300 hover:scale-105 rounded-2xl">
               </div>
             </div>
             
@@ -437,14 +445,14 @@
           <div class="grid md:grid-cols-2 gap-8">
             <a href="https://miyanoyami.github.io/sonorv/" target="_blank" class="bg-white/80 backdrop-blur-sm hover:bg-white/90 p-8 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl group">
               <div class="flex items-center justify-center mb-4">
-                <img src="/src/assets/images/miyanoyami/sonov_logo.png" alt="そのぶい" class="h-16 w-auto">
+                <img src={sonovLogo.src} alt="そのぶい" class="h-16 w-auto">
               </div>
               <h3 class="font-bold text-gray-800 mb-2 text-lg">そのぶい</h3>
               <p class="text-gray-600 text-sm">VTuberおすすめサイト</p>
             </a>
             <a href="https://utable.pages.dev/" target="_blank" class="bg-white/80 backdrop-blur-sm hover:bg-white/90 p-8 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl group">
               <div class="flex items-center justify-center mb-4">
-                <img src="/src/assets/images/miyanoyami/utable_logo.svg" alt="うたぶる" class="h-16 w-auto">
+                <img src={utableLogo.src} alt="うたぶる" class="h-16 w-auto">
               </div>
               <h3 class="font-bold text-gray-800 mb-2 text-lg">うたぶる</h3>
               <p class="text-gray-600 text-sm">歌枠支援ツール</p>
@@ -687,7 +695,7 @@
     </div>
   </div>
 
-  <script>
+  <script define:vars={{mainImageSrc: mainImage.src, mainImage2Src: mainImage2.src}}>
     // Loading animation control
     window.addEventListener('load', function() {
       const loadingOverlay = document.getElementById('loading-overlay');
@@ -722,7 +730,7 @@
 
     // Character image switching
     const characterImage = document.getElementById('character-image');
-    const images = ['/src/assets/images/miyanoyami/main.png', '/src/assets/images/miyanoyami/main2.png'];
+    const images = [mainImageSrc, mainImage2Src];
     let currentIndex = 0;
 
     // PC用：マウスホバー
