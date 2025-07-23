@@ -1,0 +1,854 @@
+---
+/* # 設計
+ * ## 概要
+ * VTuber 宮乃やみの公式サイト。
+ * 実装には astro, CSSフレームワークとして tailwind を採用する。
+ * レスポンシブデザインでスマホ・PCどちらでも表示可能。
+ *
+ * ## デザイン
+ * 白・淡い色をベースとする。
+ * 背景はCSSによる幾何学的なアニメーションを再生する。
+ * ページは画面遷移を持たず、複数のセクションを縦スクロールで閲覧する。
+ * 
+ * ## ページ構成
+ * ### ヘッダー画像
+ * * cover.png
+ * 
+ * ### 宮乃やみのプロフィール
+ * #### 名前
+ * 宮乃やみ（みやのやみ・miyanoyami）
+ * #### 紹介文
+ * 和装丸メガネVTuber.
+ * Webエンジニア.
+ * 専門領域は大規模バックエンドと金融.
+ * 使える言語はGo/Java/Kotlin/PHP/Ruby/Scala/Scheme/JavaScript/TypeScript/Python（特にGo/Java/Kotlinが得意）。
+ * 好きなお酒はクラフトビール。
+ * 趣味でVTuber向けWebサイトを複数開発・運営。
+ * そのぶい: https://miyanoyami.github.io/sonorv/
+ * うたぶる: https://utable.pages.dev/ 
+ * 
+ * #### 立ち絵画像
+ * main.png, main2.png
+ * 
+ * ### アカウント
+ * YouTube: https://www.youtube.com/@miyanoyami
+ * Twitter: https://x.com/miyanoyami83
+ * GitHub: https://github.com/miyanoyami
+ * 
+ * ### 活動歴(時間軸がわかりやすいようなビジュアルで)
+ * 2021年6月 YouTube にて配信を開始
+ * 2022年4月 チャンネル登録1,000人・収益化を達成
+ * 2024年10月 VTuberおすすめサイト『そのぶい』をリリース
+ * 2025年5月 歌枠支援ツール『うたぶる』をリリース
+ * 2025年7月 チャンネル登録10,000人を達成
+ *
+ * ### フッター
+ * 宮乃やみ all rights reserved.
+ */
+
+---
+
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/png" href="/src/assets/images/miyanoyami/logo.png" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="generator" content={Astro.generator} />
+  <title>宮乃やみ - VTuber公式サイト</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    @import "tailwindcss";
+    
+    html, body {
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .background-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: -10;
+      background: #fefcfd;
+    }
+
+    .square {
+      position: absolute;
+      width: 288px;
+      height: 288px;
+      animation: float 36s linear infinite;
+    }
+
+    .filled-blue {
+      background: linear-gradient(45deg, rgba(173, 216, 230, 0.6), rgba(135, 206, 250, 0.6));
+    }
+
+    .filled-green {
+      background: linear-gradient(45deg, rgba(204, 255, 204, 0.6), rgba(144, 238, 144, 0.6));
+    }
+
+    .filled-pink {
+      background: linear-gradient(45deg, rgba(255, 192, 203, 0.6), rgba(255, 182, 193, 0.6));
+    }
+
+    .filled-yellow {
+      background: linear-gradient(45deg, rgba(255, 255, 204, 0.6), rgba(255, 255, 153, 0.6));
+    }
+
+    .outlined-blue {
+      background: transparent;
+      border: 4px solid rgba(135, 206, 250, 0.6);
+    }
+
+    .outlined-green {
+      background: transparent;
+      border: 4px solid rgba(144, 238, 144, 0.6);
+    }
+
+    .outlined-pink {
+      background: transparent;
+      border: 4px solid rgba(255, 182, 193, 0.6);
+    }
+
+    .outlined-yellow {
+      background: transparent;
+      border: 4px solid rgba(255, 255, 153, 0.6);
+    }
+
+    @keyframes float-up {
+      0% { transform: translateY(120vh) rotate(0deg); opacity: 0; }
+      30% { opacity: 1; }
+      70% { opacity: 1; }
+      100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+    }
+
+    @keyframes float-down {
+      0% { transform: translateY(-20vh) rotate(0deg); opacity: 0; }
+      30% { opacity: 1; }
+      70% { opacity: 1; }
+      100% { transform: translateY(120vh) rotate(-360deg); opacity: 0; }
+    }
+
+    @keyframes float-left {
+      0% { transform: translateX(120vw) rotate(0deg); opacity: 0; }
+      30% { opacity: 1; }
+      70% { opacity: 1; }
+      100% { transform: translateX(-20vw) rotate(360deg); opacity: 0; }
+    }
+
+    @keyframes float-right {
+      0% { transform: translateX(-20vw) rotate(0deg); opacity: 0; }
+      30% { opacity: 1; }
+      70% { opacity: 1; }
+      100% { transform: translateX(120vw) rotate(-360deg); opacity: 0; }
+    }
+
+    /* Loading animation styles */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #fefcfd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 0.8s ease-out;
+    }
+
+    .loading-overlay.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loading-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .loading-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #a855f7, #ec4899);
+      animation: mybounce 1.6s ease-in-out infinite both;
+    }
+
+    .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+    .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+    .loading-dot:nth-child(3) { animation-delay: 0s; }
+
+    @keyframes mybounce {
+      0%, 90%, 100% { 
+        transform: translateY(0px) scale(1);
+      } 
+      45% { 
+        transform: translateY(-10px) scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading overlay -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-dots">
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+    </div>
+  </div>
+
+  <div class="min-h-screen relative w-full mx-auto">
+    <div class="background-layer" id="background"></div>
+    
+    <div class="relative z-10">
+      <!-- 固定ナビゲーションバー -->
+      <nav class="fixed top-0 left-0 right-0 z-50 bg-white/30 backdrop-blur-sm border-b border-gray-200/30">
+        <div class="flex justify-end items-center h-12 pr-4">
+            <!-- 右側のソーシャルアイコン -->
+            <div class="flex space-x-4">
+              <a href="https://www.youtube.com/@miyanoyami" target="_blank" class="w-8 h-8 md:w-10 md:h-10 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center shadow-lg transition-colors">
+                <svg viewBox="0 0 24 24" fill="white" class="w-4 h-4 md:w-5 md:h-5">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+              </a>
+              <a href="https://x.com/miyanoyami83" target="_blank" class="w-8 h-8 md:w-10 md:h-10 bg-black hover:bg-gray-800 rounded-full flex items-center justify-center shadow-lg transition-colors">
+                <svg viewBox="0 0 24 24" fill="white" class="w-4 h-4 md:w-5 md:h-5">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+              </a>
+              <a href="https://github.com/miyanoyami" target="_blank" class="w-8 h-8 md:w-10 md:h-10 bg-gray-900 hover:bg-gray-700 rounded-full flex items-center justify-center shadow-lg transition-colors">
+                <svg viewBox="0 0 24 24" fill="white" class="w-4 h-4 md:w-5 md:h-5">
+                  <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <header class="w-full relative">
+        <div class="relative w-full">
+          <img src="/src/assets/images/miyanoyami/cover.png" alt="宮乃やみ" class="w-full h-auto object-cover" style="min-height: 80vh;">
+          <div class="absolute inset-0 flex justify-center" style="align-items: flex-end; padding-bottom: 10%;">
+            <div class="text-center px-4">
+              <img src="/src/assets/images/miyanoyami/name_logo_color.png" alt="宮乃やみ" class="mx-auto max-w-lg md:max-w-xl lg:max-w-2xl h-auto">
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="py-20 px-4 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-bold text-gray-800 mb-4">プロフィール</h2>
+          <div class="w-24 h-1 bg-gradient-to-r from-purple-400 to-pink-400 mx-auto rounded-full"></div>
+        </div>
+        
+        <div class="grid lg:grid-cols-3 gap-12 items-start">
+          <div class="lg:order-2 flex flex-col items-center lg:items-start space-y-6 px-2 lg:px-0">
+            <div class="relative">
+              <div class="absolute inset-0 bg-gradient-to-br from-purple-100 to-pink-100 rounded-3xl transform rotate-3"></div>
+              <div class="relative bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-xl">
+                <img id="character-image" src="/src/assets/images/miyanoyami/main.png" alt="宮乃やみ立ち絵" class="w-72 md:w-80 lg:w-88 xl:w-104 h-auto cursor-pointer transition-all duration-300 hover:scale-105 rounded-2xl">
+              </div>
+            </div>
+            
+            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-100 w-full max-w-sm lg:max-w-none pr-0">
+              <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-2 h-8 bg-gradient-to-b from-purple-400 to-pink-400 rounded-full mr-4"></span>
+                クリエイター
+                <span class="text-xs text-gray-500 ml-2">※敬称略</span>
+              </h3>
+              <div class="space-y-3 text-sm text-gray-700">
+                <div>
+                  <span class="font-semibold">キャラクターデザイン</span><br>
+                  <span class="text-gray-600">カロク@Schwarz_jihua</span>
+                </div>
+                <!-- div>
+                  <span class="font-semibold">イラスト・モデリング</span><br>
+                  <span class="text-gray-600">黒山シープ@DYNAMIC_MAKKY</span>
+                </div -->
+                <div>
+                  <span class="font-semibold">カバーイラスト</span><br>
+                  <span class="text-gray-600">衿崎@erisaki_coda</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-2 lg:order-1 space-y-8">
+            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-gray-100">
+              <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-2 h-8 bg-gradient-to-b from-purple-400 to-pink-400 rounded-full mr-4"></span>
+                基本情報
+              </h3>
+              <div class="grid md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>
+                      <span class="font-semibold text-gray-700">名前</span>
+                      <p class="text-gray-600">宮乃やみ（みやのやみ）</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>
+                      <span class="font-semibold text-gray-700">英名</span>
+                      <p class="text-gray-600">miyanoyami</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>
+                      <span class="font-semibold text-gray-700">出身地</span>
+                      <p class="text-gray-600">北海道</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>
+                      <span class="font-semibold text-gray-700">誕生日</span>
+                      <p class="text-gray-600">7月12日</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>
+                      <span class="font-semibold text-gray-700">言語</span>
+                      <p class="text-gray-600">日本語・英語</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>
+                      <span class="font-semibold text-gray-700">属性</span>
+                      <p class="text-gray-600">和装丸眼鏡VTuber</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="space-y-4">
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>
+                      <span class="font-semibold text-gray-700">職業</span>
+                      <p class="text-gray-600">Webエンジニア</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>
+                      <span class="font-semibold text-gray-700">専門領域</span>
+                      <p class="text-gray-600">大規模バックエンド・金融</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>
+                      <span class="font-semibold text-gray-700">資格</span>
+                      <p class="text-gray-600">情報処理技術者試験12冠</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>
+                      <span class="font-semibold text-gray-700">好きなお酒</span>
+                      <p class="text-gray-600">クラフトビール・ウイスキー</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div>
+                      <span class="font-semibold text-gray-700">創作活動</span>
+                      <p class="text-gray-600">VTuber向けWebサイトを複数開発・運営</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-gray-100">
+              <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-2 h-8 bg-gradient-to-b from-purple-400 to-pink-400 rounded-full mr-4"></span>
+                プログラミング言語
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium flex items-center">
+                      <span class="mr-1">⭐</span>Go
+                    </span>
+                    <span class="px-4 py-2 bg-orange-100 text-orange-800 rounded-full text-sm font-medium flex items-center">
+                      <span class="mr-1">⭐</span>Java
+                    </span>
+                    <span class="px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm font-medium flex items-center">
+                      <span class="mr-1">⭐</span>Kotlin
+                    </span>
+                    <span class="px-4 py-2 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium">PHP</span>
+                    <span class="px-4 py-2 bg-red-100 text-red-800 rounded-full text-sm font-medium">Ruby</span>
+                    <span class="px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium">Scala</span>
+                    <span class="px-4 py-2 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">Scheme</span>
+                    <span class="px-4 py-2 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">JavaScript</span>
+                    <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">TypeScript</span>
+                    <span class="px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium">Python</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+
+          </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 mt-8">
+          <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-gray-100">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center justify-center">
+              <span class="w-2 h-8 bg-gradient-to-b from-purple-400 to-pink-400 rounded-full mr-4"></span>
+              得意分野
+            </h3>
+            <div class="flex justify-center">
+              <div class="w-96 h-96 relative">
+                <canvas id="skillRadarChart" width="400" height="400"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-16 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4 relative z-10">運営サイト</h2>
+            <div class="w-24 h-1 bg-gradient-to-r from-purple-400 to-pink-400 mx-auto rounded-full"></div>
+          </div>
+          <div class="grid md:grid-cols-2 gap-8">
+            <a href="https://miyanoyami.github.io/sonorv/" target="_blank" class="bg-white/80 backdrop-blur-sm hover:bg-white/90 p-8 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl group">
+              <div class="flex items-center justify-center mb-4">
+                <img src="/src/assets/images/miyanoyami/sonov_logo.png" alt="そのぶい" class="h-16 w-auto">
+              </div>
+              <h3 class="font-bold text-gray-800 mb-2 text-lg">そのぶい</h3>
+              <p class="text-gray-600 text-sm">VTuberおすすめサイト</p>
+            </a>
+            <a href="https://utable.pages.dev/" target="_blank" class="bg-white/80 backdrop-blur-sm hover:bg-white/90 p-8 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl group">
+              <div class="flex items-center justify-center mb-4">
+                <img src="/src/assets/images/miyanoyami/utable_logo.svg" alt="うたぶる" class="h-16 w-auto">
+              </div>
+              <h3 class="font-bold text-gray-800 mb-2 text-lg">うたぶる</h3>
+              <p class="text-gray-600 text-sm">歌枠支援ツール</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="py-16 px-4">
+        <div class="max-w-5xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4 relative z-10">活動歴</h2>
+            <div class="w-24 h-1 bg-gradient-to-r from-purple-400 to-pink-400 mx-auto rounded-full"></div>
+          </div>
+          <div class="relative">
+            <!-- デスクトップ用の中央縦線 -->
+            <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-purple-400 to-pink-400"></div>
+            <!-- スマホ用の左寄り縦線 -->
+            <div class="md:hidden absolute left-6 w-0.5 h-full bg-gradient-to-b from-purple-400 to-pink-400"></div>
+            
+            <div class="space-y-8 md:space-y-16">
+              <!-- 2021年6月 -->
+              <div class="relative">
+                <!-- デスクトップ用レイアウト -->
+                <div class="hidden md:flex items-center">
+                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
+                  <div class="w-1/2 pr-8 text-right">
+                    <div class="relative">
+                      <div class="absolute right-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
+                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg mr-10 border border-purple-100">
+                        <div class="text-purple-600 font-bold text-sm mb-2">2021年6月</div>
+                        <h3 class="font-bold text-gray-800 mb-1">YouTube配信開始</h3>
+                        <p class="text-gray-600 text-sm">YouTubeにて配信を開始</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w-1/2"></div>
+                </div>
+                <!-- スマホ用レイアウト -->
+                <div class="md:hidden flex items-center">
+                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
+                  <div class="ml-12 w-full">
+                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
+                      <div class="text-purple-600 font-bold text-xs mb-1">2021年6月</div>
+                      <h3 class="font-bold text-gray-800 text-sm mb-1">YouTube配信開始</h3>
+                      <p class="text-gray-600 text-xs">YouTubeにて配信を開始</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2022年4月 -->
+              <div class="relative">
+                <!-- デスクトップ用レイアウト -->
+                <div class="hidden md:flex items-center">
+                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
+                  <div class="w-1/2"></div>
+                  <div class="w-1/2 pl-8 text-left">
+                    <div class="relative">
+                      <div class="absolute left-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
+                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg ml-10 border border-purple-100">
+                        <div class="text-purple-600 font-bold text-sm mb-2">2022年4月</div>
+                        <h3 class="font-bold text-gray-800 mb-1">収益化達成</h3>
+                        <p class="text-gray-600 text-sm">チャンネル登録1,000人・収益化を達成</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- スマホ用レイアウト -->
+                <div class="md:hidden flex items-center">
+                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
+                  <div class="ml-12 w-full">
+                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
+                      <div class="text-purple-600 font-bold text-xs mb-1">2022年4月</div>
+                      <h3 class="font-bold text-gray-800 text-sm mb-1">収益化達成</h3>
+                      <p class="text-gray-600 text-xs">チャンネル登録1,000人・収益化を達成</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2024年10月 -->
+              <div class="relative">
+                <!-- デスクトップ用レイアウト -->
+                <div class="hidden md:flex items-center">
+                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
+                  <div class="w-1/2 pr-8 text-right">
+                    <div class="relative">
+                      <div class="absolute right-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
+                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg mr-10 border border-purple-100">
+                        <div class="text-purple-600 font-bold text-sm mb-2">2024年10月</div>
+                        <h3 class="font-bold text-gray-800 mb-1">そのぶいリリース</h3>
+                        <p class="text-gray-600 text-sm">VTuberおすすめサイト『そのぶい』をリリース</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w-1/2"></div>
+                </div>
+                <!-- スマホ用レイアウト -->
+                <div class="md:hidden flex items-center">
+                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
+                  <div class="ml-12 w-full">
+                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
+                      <div class="text-purple-600 font-bold text-xs mb-1">2024年10月</div>
+                      <h3 class="font-bold text-gray-800 text-sm mb-1">そのぶいリリース</h3>
+                      <p class="text-gray-600 text-xs">VTuberおすすめサイト『そのぶい』をリリース</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2023年5月 -->
+              <div class="relative">
+                <!-- デスクトップ用レイアウト -->
+                <div class="hidden md:flex items-center">
+                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
+                  <div class="w-1/2"></div>
+                  <div class="w-1/2 pl-8 text-left">
+                    <div class="relative">
+                      <div class="absolute left-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
+                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg ml-10 border border-purple-100">
+                        <div class="text-purple-600 font-bold text-sm mb-2">2023年5月</div>
+                        <h3 class="font-bold text-gray-800 mb-1">YouTube登録3,000人到達</h3>
+                        <p class="text-gray-600 text-sm">YouTubeチャンネル登録者数3,000人を達成</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- スマホ用レイアウト -->
+                <div class="md:hidden flex items-center">
+                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
+                  <div class="ml-12 w-full">
+                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
+                      <div class="text-purple-600 font-bold text-xs mb-1">2023年5月</div>
+                      <h3 class="font-bold text-gray-800 text-sm mb-1">YouTube3,000人到達</h3>
+                      <p class="text-gray-600 text-xs">YouTubeチャンネル登録者数3,000人を達成</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2024年5月 -->
+              <div class="relative">
+                <!-- デスクトップ用レイアウト -->
+                <div class="hidden md:flex items-center">
+                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
+                  <div class="w-1/2 pr-8 text-right">
+                    <div class="relative">
+                      <div class="absolute right-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
+                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg mr-10 border border-purple-100">
+                        <div class="text-purple-600 font-bold text-sm mb-2">2024年5月</div>
+                        <h3 class="font-bold text-gray-800 mb-1">YouTube5,000人到達</h3>
+                        <p class="text-gray-600 text-sm">YouTubeチャンネル登録者数5,000人を達成</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w-1/2"></div>
+                </div>
+                <!-- スマホ用レイアウト -->
+                <div class="md:hidden flex items-center">
+                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
+                  <div class="ml-12 w-full">
+                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
+                      <div class="text-purple-600 font-bold text-xs mb-1">2024年5月</div>
+                      <h3 class="font-bold text-gray-800 text-sm mb-1">YouTube5,000人到達</h3>
+                      <p class="text-gray-600 text-xs">YouTubeチャンネル登録5,000人を達成</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2025年5月 -->
+              <div class="relative">
+                <!-- デスクトップ用レイアウト -->
+                <div class="hidden md:flex items-center">
+                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
+                  <div class="w-1/2"></div>
+                  <div class="w-1/2 pl-8 text-left">
+                    <div class="relative">
+                      <div class="absolute left-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
+                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg ml-10 border border-purple-100">
+                        <div class="text-purple-600 font-bold text-sm mb-2">2025年5月</div>
+                        <h3 class="font-bold text-gray-800 mb-1">うたぶるリリース</h3>
+                        <p class="text-gray-600 text-sm">歌枠支援ツール『うたぶる』をリリース</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- スマホ用レイアウト -->
+                <div class="md:hidden flex items-center">
+                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
+                  <div class="ml-12 w-full">
+                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
+                      <div class="text-purple-600 font-bold text-xs mb-1">2025年5月</div>
+                      <h3 class="font-bold text-gray-800 text-sm mb-1">うたぶるリリース</h3>
+                      <p class="text-gray-600 text-xs">歌枠支援ツール『うたぶる』をリリース</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2025年7月 -->
+              <!-- div class="relative" -->
+                <!-- デスクトップ用レイアウト -->
+                <!-- div class="hidden md:flex items-center">
+                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
+                  <div class="w-1/2 pr-8 text-right">
+                    <div class="relative">
+                      <div class="absolute right-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
+                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg mr-10 border border-purple-100">
+                        <div class="text-purple-600 font-bold text-sm mb-2">2025年7月</div>
+                        <h3 class="font-bold text-gray-800 mb-1">1万人達成</h3>
+                        <p class="text-gray-600 text-sm">チャンネル登録10,000人を達成</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w-1/2"></div>
+                </div -->
+                <!-- スマホ用レイアウト -->
+                <!-- div class="md:hidden flex items-center">
+                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
+                  <div class="ml-12 w-full">
+                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
+                      <div class="text-purple-600 font-bold text-xs mb-1">2025年7月</div>
+                      <h3 class="font-bold text-gray-800 text-sm mb-1">1万人達成</h3>
+                      <p class="text-gray-600 text-xs">チャンネル登録10,000人を達成</p>
+                    </div>
+                  </div>
+                </div-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="py-8 px-4 bg-gray-800 text-white text-center">
+        <p>&copy; 宮乃やみ all rights reserved.</p>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // Loading animation control
+    window.addEventListener('load', function() {
+      const loadingOverlay = document.getElementById('loading-overlay');
+      
+      // Show loading for 2.5 seconds
+      setTimeout(function() {
+        loadingOverlay.classList.add('fade-out');
+        
+        // Remove from DOM after fade out animation completes
+        setTimeout(function() {
+          loadingOverlay.style.display = 'none';
+        }, 800);
+      }, 2500);
+    });
+
+    const directions = ['float-up', 'float-down', 'float-left', 'float-right'];
+    const colorClasses = [
+        'filled-blue', 'filled-green', 'filled-pink', 'filled-yellow',
+        'outlined-blue', 'outlined-green', 'outlined-pink', 'outlined-yellow'
+    ];
+    const background = document.getElementById('background');
+    for (let i = 0; i < 6; i++) {
+        const square = document.createElement('div');
+        square.classList.add('square');
+        square.classList.add(colorClasses[i % colorClasses.length]);
+        square.style.left = Math.random() * 100 + 'vw';
+        square.style.top = Math.random() * 100 + 'vh';
+        square.style.animationName = directions[Math.floor(Math.random() * directions.length)];
+        square.style.animationDuration = (36 + Math.random() * 10) + 's';
+        background.appendChild(square);
+    }
+
+    // Character image switching
+    const characterImage = document.getElementById('character-image');
+    const images = ['/src/assets/images/miyanoyami/main.png', '/src/assets/images/miyanoyami/main2.png'];
+    let currentIndex = 0;
+
+    // PC用：マウスホバー
+    characterImage.addEventListener('mouseenter', () => {
+        currentIndex = (currentIndex + 1) % images.length;
+        characterImage.src = images[currentIndex];
+    });
+
+    characterImage.addEventListener('mouseleave', () => {
+        characterImage.src = images[0];
+        currentIndex = 0;
+    });
+    
+    // スマホ・タブレット用：タップ
+    characterImage.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // デフォルトのタッチ動作を防ぐ
+        currentIndex = (currentIndex + 1) % images.length;
+        characterImage.src = images[currentIndex];
+    });
+    
+    // スマホ・タブレット用：タップ終了で元に戻す
+    characterImage.addEventListener('touchend', () => {
+        setTimeout(() => {
+            characterImage.src = images[0];
+            currentIndex = 0;
+        }, 1000); // 1秒後に元の画像に戻す
+    });
+
+    // Radar Chart for Skills
+    const canvas = document.getElementById('skillRadarChart');
+    const ctx = canvas.getContext('2d');
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = 140;
+
+    const skills = [
+        { name: 'バックエンド', value: 5 },
+        { name: 'インフラ', value: 4 },
+        { name: 'DB', value: 4 },
+        { name: 'セキュリティ', value: 3 },
+        { name: 'データサイエンス', value: 2 },
+        { name: 'PM', value: 3 },
+        { name: 'ビジネス', value: 3 },
+        { name: 'リーガル', value: 3 },
+        { name: 'デザイン', value: 1 },
+        { name: 'フロントエンド', value: 2 }
+    ];
+
+    // Draw radar chart
+    function drawRadarChart() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw grid circles
+        for (let i = 1; i <= 5; i++) {
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, (radius / 5) * i, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#e5e7eb';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+
+        // Draw grid lines
+        const angleStep = (2 * Math.PI) / skills.length;
+        for (let i = 0; i < skills.length; i++) {
+            const angle = i * angleStep - Math.PI / 2;
+            const x = centerX + Math.cos(angle) * radius;
+            const y = centerY + Math.sin(angle) * radius;
+            
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(x, y);
+            ctx.strokeStyle = '#e5e7eb';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // Draw labels
+            const labelX = centerX + Math.cos(angle) * (radius + 35);
+            const labelY = centerY + Math.sin(angle) * (radius + 35);
+            
+            ctx.fillStyle = '#374151';
+            ctx.font = '10px "M PLUS Rounded 1c"';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(skills[i].name, labelX, labelY);
+        }
+
+        // Draw skill polygon
+        ctx.beginPath();
+        for (let i = 0; i < skills.length; i++) {
+            const angle = i * angleStep - Math.PI / 2;
+            const distance = (radius / 5) * skills[i].value;
+            const x = centerX + Math.cos(angle) * distance;
+            const y = centerY + Math.sin(angle) * distance;
+            
+            if (i === 0) {
+                ctx.moveTo(x, y);
+            } else {
+                ctx.lineTo(x, y);
+            }
+        }
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(168, 85, 247, 0.2)';
+        ctx.fill();
+        ctx.strokeStyle = '#a855f7';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Draw skill points
+        for (let i = 0; i < skills.length; i++) {
+            const angle = i * angleStep - Math.PI / 2;
+            const distance = (radius / 5) * skills[i].value;
+            const x = centerX + Math.cos(angle) * distance;
+            const y = centerY + Math.sin(angle) * distance;
+            
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, 2 * Math.PI);
+            ctx.fillStyle = '#a855f7';
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+    }
+
+    drawRadarChart();
+  </script>
+</body>
+</html>
+
