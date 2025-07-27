@@ -8,6 +8,25 @@ import furenIcon from '../assets/images/kurayami202508/furen_icon.jpg';
 import coolIcon from '../assets/images/kurayami202508/cool_icon.jpg';
 import konohaIcon from '../assets/images/kurayami202508/konoha_icon.png';
 import echoIcon from '../assets/images/kurayami202508/echo_icon.jpg';
+import adaIcon from '../assets/images/kurayami202508/ada_icon.jpg';
+
+// チーム紹介スライド
+import team01 from '../assets/images/kurayami202508/thumb/01.jpg';
+import team02 from '../assets/images/kurayami202508/thumb/02.jpg';
+import team03 from '../assets/images/kurayami202508/thumb/03.jpg';
+import team04 from '../assets/images/kurayami202508/thumb/04.jpg';
+import team05 from '../assets/images/kurayami202508/thumb/05.jpg';
+import team06 from '../assets/images/kurayami202508/thumb/06.jpg';
+import team07 from '../assets/images/kurayami202508/thumb/07.jpg';
+import team08 from '../assets/images/kurayami202508/thumb/08.jpg';
+import team09 from '../assets/images/kurayami202508/thumb/09.jpg';
+import team10 from '../assets/images/kurayami202508/thumb/10.jpg';
+import team11 from '../assets/images/kurayami202508/thumb/11.jpg';
+import team12 from '../assets/images/kurayami202508/thumb/12.jpg';
+import team13 from '../assets/images/kurayami202508/thumb/13.jpg';
+import team14 from '../assets/images/kurayami202508/thumb/14.jpg';
+import team15 from '../assets/images/kurayami202508/thumb/15.jpg';
+import team16 from '../assets/images/kurayami202508/thumb/16.jpg';
 
 const eventName = "くらやみ杯";
 const eventDate = "2025年8月3日(日) 20:30 開始";
@@ -23,6 +42,26 @@ const timetable = [
 const stages = [
 "ネギトロ炭鉱", "海女美術大学", "ヤガラ市場", "ヒラメが丘団地",
 "ザトウマーケット", "カジキ空港", "タカアシ経済特区", "ゴンズイ地区"
+];
+
+// 参加チーム
+const teams = [
+{ id: 1, name: "桃猫牙石", image: team01 },
+{ id: 2, name: "はこいりもちぞー", image: team02 },
+{ id: 3, name: "parm", image: team03 },
+{ id: 4, name: "月狼の喫茶店にいこうか", image: team04 },
+{ id: 5, name: "エイムに限界がきたので彼女作ってみた", image: team05 },
+{ id: 6, name: "Obsidian-Moon", image: team06 },
+{ id: 7, name: "VOL082", image: team07 },
+{ id: 8, name: "HALC", image: team08 },
+{ id: 9, name: "おりラジ", image: team09 },
+{ id: 10, name: "かしましLady", image: team10 },
+{ id: 11, name: "絶対王政まる姫政権", image: team11 },
+{ id: 12, name: "スミっコぐらし", image: team12 },
+{ id: 13, name: "生足魅惑のマーメイズ", image: team13 },
+{ id: 14, name: "吾輩はイカである。名前はまだ無い。", image: team14 },
+{ id: 15, name: "牧草地から見たソールズベリー大聖堂", image: team15 },
+{ id: 16, name: "パッション博物館", image: team16 }
 ];
 ---
 
@@ -137,11 +176,11 @@ const stages = [
                 </div>
 
                 <div>
-                  <h4 class="text-xl font-bold text-purple-300"><!--ストリーマー-->???賞</h4>
+                  <h4 class="text-xl font-bold text-purple-300">ストリーマー賞</h4>
                   <ul class="list-disc list-inside mt-2 space-y-2 marker:text-purple-400 text-gray-300">
-                    <li class="text-gray-300 mt-1">※後日公開</li>
+                    <li class="text-gray-300 mt-1">オリジナルドットアニメーション</li>
                   </ul>
-                  <!-- <p class="text-gray-300 mt-1">※特に配信枠が盛り上がっていた1名に進呈</p>-->
+                  <p class="text-gray-300 mt-1">※特に配信枠が盛り上がっていた1名に進呈</p>
                 </div>
               </div>
             </div>
@@ -242,6 +281,24 @@ const stages = [
                     </div>
                   </li>
                   <li class="flex items-center gap-4">
+                    <img src={adaIcon.src} class="w-14 h-14 rounded-full border-2 border-purple-500">
+                    <div>
+                      <span class="text-gray-400 text-sm">
+                        ストリーマー賞担当
+                      </span>
+                      <p class="font-bold text-lg">
+                      eida
+                      <a href="https://x.com/ada_no_da" class="inline-flex" target="_blank">
+                        @ada_no_da 
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                        </svg>
+                      </a>
+                      </p>
+                    </div>
+                  </li>
+
+                  <li class="flex items-center gap-4">
                     <img src={echoIcon.src} class="w-14 h-14 rounded-full border-2 border-purple-500">
                     <div>
                       <span class="text-gray-400 text-sm">
@@ -259,25 +316,6 @@ const stages = [
                     </div>
                   </li>
 
-                  <!--
-                    <li class="flex items-center gap-4">
-                    <img src="" class="w-14 h-14 rounded-full border-2 border-purple-500">
-                    <div>
-                    <span class="text-gray-400 text-sm">
-                    ストリーマー賞担当
-                    </span>
-                    <p class="font-bold text-lg">
-                    eida
-                    <a href="https://x.com/ada_no_da" class="inline-flex" target="_blank">
-                    @ada_no_da 
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                    </svg>
-                    </a>
-                    </p>
-                    </div>
-                    </li>
-                  -->
                 </ul>
               </div>
             </div>
@@ -355,6 +393,28 @@ const stages = [
             </div>
           </div>
         </section>
+
+        <section id="teams">
+          <h2 class="text-4xl font-bold text-center text-purple-400 mb-8">参加チーム</h2>
+          <div class="bg-gray-800/50 backdrop-blur-sm p-8 rounded-lg border border-gray-700">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {teams.map(team => (
+              <div class="bg-gray-700/50 rounded-lg p-4 hover:bg-gray-700/70 transition-colors">
+                <div class="aspect-video overflow-hidden rounded-md mb-2">
+                  <img 
+                  src={team.image.src} 
+                  alt={`チーム${team.id}紹介スライド`}
+                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
+                  onclick={`openModal('${team.image.src}', 'チーム${team.id}: ${team.name}')`}
+                  />
+                </div>
+                <p class="text-center font-bold text-purple-300">【チーム{team.id}】</p>
+                <p class="text-center text-sm text-gray-300 mt-1">{team.name}</p>
+              </div>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer class="text-center mt-20 pt-8 border-t-2 border-purple-600/50">
@@ -362,5 +422,48 @@ const stages = [
       </footer>
 
     </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+      <div class="relative max-w-4xl max-h-full p-4">
+        <button onclick="closeModal()" class="absolute top-2 right-2 text-white text-3xl hover:text-gray-300 z-10">&times;</button>
+        <img id="modalImage" src="" alt="" class="max-w-full max-h-full object-contain rounded-lg">
+        <p id="modalTitle" class="text-white text-center mt-4 font-bold"></p>
+      </div>
+    </div>
+
+<script>
+  window.openModal = function(imageSrc, title) {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+
+    modalImage.src = imageSrc;
+    modalImage.alt = title;
+    modalTitle.textContent = title;
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closeModal = function() {
+    const modal = document.getElementById('imageModal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  };
+
+  // Close modal when clicking outside the image
+  document.getElementById('imageModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      window.closeModal();
+    }
+  });
+
+  // Close modal with Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      window.closeModal();
+    }
+  });
+</script>
   </body>
 </html>
