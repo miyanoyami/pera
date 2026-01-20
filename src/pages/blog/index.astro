@@ -1,0 +1,365 @@
+---
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
+import '../../styles/global.css';
+import '../../styles/blog.css';
+
+// Read all markdown files from the blog content directory
+const blogDir = path.join(process.cwd(), 'src/content/blog');
+const files = fs.readdirSync(blogDir);
+
+const allPosts = files
+  .filter(file => file.endsWith('.md'))
+  .map(file => {
+    const filePath = path.join(blogDir, file);
+    const fileContents = fs.readFileSync(filePath, 'utf8');
+    const { data } = matter(fileContents);
+
+    return {
+      slug: file.replace('.md', ''),
+      title: data.title || 'Untitled',
+      date: data.date || '',
+      description: data.description || '',
+      category: data.category || 'その他',
+    };
+  })
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+// Get unique categories for filter buttons
+const categories = ['すべて', '技術', '日記', 'その他'];
+
+// Get unique years from all posts for year filter
+const years = ['すべて', ...Array.from(new Set(
+  allPosts.map(post => new Date(post.date).getFullYear().toString())
+)).sort((a, b) => Number(b) - Number(a))];
+
+// Helper function to get category color
+function getCategoryColor(category: string) {
+  switch (category) {
+    case '技術':
+      return 'bg-blue-100 text-blue-800';
+    case '日記':
+      return 'bg-green-100 text-green-800';
+    case 'その他':
+      return 'bg-gray-100 text-gray-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
+  }
+}
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>みやのやみのきろく</title>
+  </head>
+  <body class="bg-white min-h-screen">
+    <!-- Full width header image -->
+    <div class="w-full">
+      <img
+        src="/pera/pei.png"
+        alt="みやのやみのきろく"
+        class="w-full h-auto object-cover"
+        style="max-height: 320px;"
+      />
+    </div>
+
+    <div class="max-w-3xl mx-auto px-6 py-12">
+      <header class="mb-12 text-center">
+        <h1 class="text-3xl font-light text-gray-900 mb-2 tracking-wide">みやのやみのきろく</h1>
+        <p class="text-sm text-gray-500">宮乃やみのブログです。技術記事とか雑記とか。</p>
+      </header>
+
+      <!-- Filters -->
+      <div class="mb-12 border-b border-gray-200 pb-8">
+        <div class="flex flex-wrap gap-6 justify-center">
+          <!-- Category Filter -->
+          <div>
+            <p class="text-xs text-gray-500 mb-3 uppercase tracking-wider">カテゴリ</p>
+            <div class="flex flex-wrap gap-2" id="category-filter">
+              {categories.map((category) => (
+                <button
+                  data-category={category}
+                  class="px-3 py-1 text-sm transition-colors border border-gray-300 hover:border-gray-900 filter-button category-button"
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <!-- Year Filter -->
+          <div>
+            <p class="text-xs text-gray-500 mb-3 uppercase tracking-wider">投稿日</p>
+            <div class="flex flex-wrap gap-2" id="year-filter">
+              {years.map((year) => (
+                <button
+                  data-year={year}
+                  class="px-3 py-1 text-sm transition-colors border border-gray-300 hover:border-gray-900 filter-button year-button"
+                >
+                  {year}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-8" id="posts-container">
+        {allPosts.map((post) => (
+          <article
+            class="border-b border-gray-100 pb-8 last:border-0 post-item hover:bg-gray-50 transition-colors px-4 py-2 -mx-4 -my-2"
+            data-category={post.category}
+            data-year={new Date(post.date).getFullYear()}
+          >
+            <a href={`/pera/blog/${post.slug}`} class="block group">
+              <div class="flex items-center gap-3 mb-3 text-xs text-gray-500">
+                <time>
+                  {new Date(post.date).toLocaleDateString('ja-JP', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                  })}
+                </time>
+                <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+                <span class="text-gray-700">{post.category}</span>
+              </div>
+              <h2 class="text-xl font-normal text-gray-900 mb-2 group-hover:text-gray-600 transition-colors">
+                {post.title}
+              </h2>
+              {post.description && (
+                <p class="text-sm text-gray-600 leading-relaxed">{post.description}</p>
+              )}
+            </a>
+          </article>
+        ))}
+      </div>
+
+      <p class="text-gray-500 text-center py-12 hidden" id="no-posts-message">
+        該当する記事がありません
+      </p>
+
+      <!-- Pagination -->
+      <div class="mt-16 flex justify-center items-center gap-3 border-t border-gray-200 pt-8" id="pagination">
+        <button
+          id="prev-page"
+          class="px-4 py-2 text-sm transition-colors border border-gray-300 hover:border-gray-900 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-gray-300"
+        >
+          ← Prev
+        </button>
+        <div id="page-numbers" class="flex gap-2"></div>
+        <button
+          id="next-page"
+          class="px-4 py-2 text-sm transition-colors border border-gray-300 hover:border-gray-900 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-gray-300"
+        >
+          Next →
+        </button>
+      </div>
+
+      <!-- Footer -->
+      <footer class="mt-20 pt-8 border-t border-gray-200 text-center">
+        <a
+          href="/pera/miyanoyami"
+          class="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors group"
+        >
+          <span>宮乃やみのWEBサイト</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4 transition-transform group-hover:translate-x-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </a>
+        <p class="mt-4 text-xs text-gray-400">© 2026 miyano yami</p>
+      </footer>
+    </div>
+
+    <script>
+      let selectedCategory = 'すべて';
+      let selectedYear = 'すべて';
+      let currentPage = 1;
+      const postsPerPage = 20;
+
+      function getFilteredPosts() {
+        const posts = Array.from(document.querySelectorAll('.post-item'));
+        return posts.filter((post) => {
+          const postCategory = post.getAttribute('data-category');
+          const postYear = post.getAttribute('data-year');
+          const categoryMatch = selectedCategory === 'すべて' || postCategory === selectedCategory;
+          const yearMatch = selectedYear === 'すべて' || postYear === selectedYear;
+          return categoryMatch && yearMatch;
+        });
+      }
+
+      function renderPosts() {
+        const filteredPosts = getFilteredPosts();
+        const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+        const noPostsMessage = document.getElementById('no-posts-message');
+        const pagination = document.getElementById('pagination');
+
+        // Hide all posts first
+        document.querySelectorAll('.post-item').forEach((post) => {
+          post.style.display = 'none';
+        });
+
+        if (filteredPosts.length === 0) {
+          noPostsMessage.classList.remove('hidden');
+          pagination.classList.add('hidden');
+          return;
+        } else {
+          noPostsMessage.classList.add('hidden');
+          pagination.classList.remove('hidden');
+        }
+
+        // Show posts for current page
+        const startIndex = (currentPage - 1) * postsPerPage;
+        const endIndex = startIndex + postsPerPage;
+        filteredPosts.slice(startIndex, endIndex).forEach((post) => {
+          post.style.display = 'block';
+        });
+
+        // Update pagination controls
+        updatePaginationControls(totalPages);
+      }
+
+      function updatePaginationControls(totalPages) {
+        const prevButton = document.getElementById('prev-page');
+        const nextButton = document.getElementById('next-page');
+        const pageNumbers = document.getElementById('page-numbers');
+
+        // Update prev/next buttons
+        prevButton.disabled = currentPage === 1;
+        nextButton.disabled = currentPage === totalPages || totalPages === 0;
+
+        // Clear and rebuild page numbers
+        pageNumbers.innerHTML = '';
+
+        if (totalPages <= 7) {
+          // Show all pages if 7 or fewer
+          for (let i = 1; i <= totalPages; i++) {
+            pageNumbers.appendChild(createPageButton(i));
+          }
+        } else {
+          // Show first page
+          pageNumbers.appendChild(createPageButton(1));
+
+          if (currentPage > 3) {
+            pageNumbers.appendChild(createEllipsis());
+          }
+
+          // Show pages around current page
+          const start = Math.max(2, currentPage - 1);
+          const end = Math.min(totalPages - 1, currentPage + 1);
+          for (let i = start; i <= end; i++) {
+            pageNumbers.appendChild(createPageButton(i));
+          }
+
+          if (currentPage < totalPages - 2) {
+            pageNumbers.appendChild(createEllipsis());
+          }
+
+          // Show last page
+          pageNumbers.appendChild(createPageButton(totalPages));
+        }
+      }
+
+      function createPageButton(pageNum) {
+        const button = document.createElement('button');
+        button.textContent = pageNum;
+        button.className = `px-3 py-2 text-sm transition-colors ${
+          pageNum === currentPage
+            ? 'border border-gray-900 text-gray-900'
+            : 'border border-gray-300 hover:border-gray-900'
+        }`;
+        button.addEventListener('click', () => {
+          currentPage = pageNum;
+          renderPosts();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        return button;
+      }
+
+      function createEllipsis() {
+        const span = document.createElement('span');
+        span.textContent = '...';
+        span.className = 'px-2 py-2 text-gray-500';
+        return span;
+      }
+
+      function updateButtonStates() {
+        // Update category buttons
+        document.querySelectorAll('.category-button').forEach((btn) => {
+          const category = btn.getAttribute('data-category');
+          if (category === selectedCategory) {
+            btn.classList.add('border-gray-900', 'text-gray-900');
+            btn.classList.remove('border-gray-300');
+          } else {
+            btn.classList.remove('border-gray-900', 'text-gray-900');
+            btn.classList.add('border-gray-300');
+          }
+        });
+
+        // Update year buttons
+        document.querySelectorAll('.year-button').forEach((btn) => {
+          const year = btn.getAttribute('data-year');
+          if (year === selectedYear) {
+            btn.classList.add('border-gray-900', 'text-gray-900');
+            btn.classList.remove('border-gray-300');
+          } else {
+            btn.classList.remove('border-gray-900', 'text-gray-900');
+            btn.classList.add('border-gray-300');
+          }
+        });
+      }
+
+      // Category filter event listeners
+      document.querySelectorAll('.category-button').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          selectedCategory = btn.getAttribute('data-category');
+          currentPage = 1; // Reset to first page
+          updateButtonStates();
+          renderPosts();
+        });
+      });
+
+      // Year filter event listeners
+      document.querySelectorAll('.year-button').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          selectedYear = btn.getAttribute('data-year');
+          currentPage = 1; // Reset to first page
+          updateButtonStates();
+          renderPosts();
+        });
+      });
+
+      // Pagination button listeners
+      document.getElementById('prev-page').addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderPosts();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+
+      document.getElementById('next-page').addEventListener('click', () => {
+        const filteredPosts = getFilteredPosts();
+        const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderPosts();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+
+      // Initialize
+      updateButtonStates();
+      renderPosts();
+    </script>
+  </body>
+</html>
