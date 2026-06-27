@@ -34,7 +34,7 @@
 .prose p {
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
-  line-height: 1.75;
+  line-height: 1.6;
 }
 
 .prose a {
@@ -123,7 +123,7 @@
 
 .prose-lg {
   font-size: 1.125rem;
-  line-height: 1.7777778;
+  line-height: 1.6;
 }
 
 .prose-lg p {
