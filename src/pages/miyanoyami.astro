@@ -7,7 +7,6 @@ import sonovLogo from '../assets/images/miyanoyami/sonov_logo.png';
 import sonov2Logo from '../assets/images/miyanoyami/sonov2_logo.png';
 import utableLogo from '../assets/images/miyanoyami/utable_logo.svg';
 import oshiyellLogo from '../assets/images/miyanoyami/oshiyell_logo.png';
-import logoIcon from '../assets/images/miyanoyami/logo.png';
 
 /* # 設計
  * ## 概要
@@ -16,975 +15,501 @@ import logoIcon from '../assets/images/miyanoyami/logo.png';
  * レスポンシブデザインでスマホ・PCどちらでも表示可能。
  *
  * ## デザイン
- * 白・淡い色をベースとする。
- * 背景はCSSによる幾何学的なアニメーションを再生する。
- * ページは画面遷移を持たず、複数のセクションを縦スクロールで閲覧する。
- * 
- * ## ページ構成
- * ### ヘッダー画像
- * * cover2.webp
- * 
- * ### 宮乃やみのプロフィール
- * #### 名前
- * 宮乃やみ（みやのやみ・miyanoyami）
- * #### 紹介文
- * 和装丸メガネVTuber.
- * Webエンジニア.
- * 専門領域は大規模バックエンドと金融.
- * 使える言語はGo/Java/Kotlin/PHP/Ruby/Scala/Scheme/JavaScript/TypeScript/Python（特にGo/Java/Kotlinが得意）。
- * 好きなお酒はクラフトビール。
- * 趣味でVTuber向けWebサイトを複数開発・運営。
- * そのぶい: https://miyanoyami.github.io/sonorv/
- * うたぶる: https://utable.pages.dev/ 
- * 
- * #### 立ち絵画像
- * main.png, main2.png
- * 
- * ### アカウント
- * YouTube: https://www.youtube.com/@miyanoyami
- * Twitter: https://x.com/miyanoyami83
- * GitHub: https://github.com/miyanoyami
- * 
- * ### 活動歴(時間軸がわかりやすいようなビジュアルで)
- * 2021年6月 YouTube にて配信を開始
- * 2022年4月 チャンネル登録1,000人・収益化を達成
- * 2024年10月 VTuberおすすめサイト『そのぶい』をリリース
- * 2025年5月 歌枠支援ツール『うたぶる』をリリース
- * 2025年7月 チャンネル登録10,000人を達成
+ * 白（生成り）× 墨 × 金。差し色の金は最小限に使う。
+ * グラデーションは使わない。角は丸めず、細い罫線と余白で区切る。
+ * 見出しは英字セリフ（Cormorant Garamond）＋明朝（Shippori Mincho）、本文は Noto Sans JP。
+ * 背景アニメーション・ローディング画面は持たない。
+ * 縦スクロールは残しつつ、情報は列挙せずスライド・タブ・横スクロールでコンパクトに収める。
  *
- * ### フッター
- * 宮乃やみ all rights reserved.
+ * ## ページ構成
+ * ヘッダー画像（cover2.webp）
+ * → PROFILE（立ち絵＋カードをスライドで切り替え：BASIC / CAREER / SKILLS / FAVORITE / CREATORS）
+ * → HISTORY（横スクロールの年表。年ボタンでジャンプ、初期表示は最新）
+ * → WORKS（カルーセル）
+ * → GEAR（配信／開発のタブ切り替え）
+ * → フッター
+ * 各セクションの内容は下記のデータ定義を編集する。
  */
 
+const links = [
+  { label: 'YouTube', href: 'https://www.youtube.com/@miyanoyami' },
+  { label: 'X', href: 'https://x.com/miyanoyami83' },
+  { label: 'GitHub', href: 'https://github.com/miyanoyami' },
+  { label: 'Blog', href: '/pera/blog', internal: true },
+];
+
+const profileCards = [
+  {
+    key: 'BASIC',
+    items: [
+      { label: '名前', value: '宮乃やみ（みやのやみ）' },
+      { label: '英名', value: 'miyanoyami' },
+      { label: '出身地', value: '北海道' },
+      { label: '誕生日', value: '7月12日' },
+      { label: '言語', value: '日本語・英語' },
+      { label: '属性', value: '和装丸眼鏡VTuber' },
+    ],
+  },
+  {
+    key: 'CAREER',
+    items: [
+      { label: '職業', value: 'Webエンジニア' },
+      { label: '専門領域', value: '大規模バックエンド・金融' },
+      { label: '資格', value: '情報処理技術者試験12冠' },
+      { label: '創作活動', value: 'VTuber向けWebサイトを複数開発・運営' },
+    ],
+  },
+  { key: 'SKILLS' },
+  {
+    key: 'FAVORITE',
+    items: [
+      { label: '好きなお酒', value: 'クラフトビール・ウイスキー' },
+    ],
+  },
+  { key: 'CREATORS' },
+];
+
+const creators = [
+  { role: 'キャラクターデザイン', name: 'カロク', handle: 'Schwarz_jihua' },
+  { role: 'イラスト・モデリング', name: '黒山シープ', handle: 'DYNAMIC_MAKKY' },
+  { role: 'カバーイラスト', name: '衿崎', handle: 'erisaki_coda' },
+];
+
+const mainLanguages = ['Go', 'Java', 'Kotlin'];
+const otherLanguages = ['PHP', 'Ruby', 'Scala', 'Scheme', 'JavaScript', 'TypeScript', 'Python'];
+
+const gear = [
+  {
+    id: 'streaming',
+    title: '配信機材',
+    items: [
+      { label: 'CPU', value: 'Intel Core i7-13700KF' },
+      { label: 'GPU', value: 'NVIDIA GeForce RTX 3070' },
+      { label: 'メモリ', value: '64GB' },
+      { label: 'ストレージ', value: 'SSD 2TB' },
+      { label: 'マイク', value: 'audio-technica AT4040' },
+      { label: 'オーディオI/F', value: 'Steinberg UR44C' },
+    ],
+  },
+  {
+    id: 'development',
+    title: '開発機材',
+    items: [
+      { label: 'モデル', value: 'MacBook Air M4' },
+      { label: 'メモリ', value: '24GB ユニファイドメモリ' },
+      { label: 'ストレージ', value: 'SSD 256GB' },
+    ],
+  },
+];
+
+const works = [
+  { name: 'そのぶい', desc: 'VTuberおすすめサイト', href: 'https://miyanoyami.github.io/sonorv/', logo: sonovLogo },
+  { name: 'うたぶる', desc: '歌枠支援ツール', href: 'https://utable.pages.dev/', logo: utableLogo },
+  { name: 'おしえーる', desc: '推しが応援してくれるポモドーロタイマー', href: 'https://miyanoyami.github.io/vtimer/', logo: oshiyellLogo },
+  { name: 'そのぶいつー', desc: '癖でタグ検索しまくれるVTuberのWebサイト集', href: 'https://sonov2.vtube.work/', logo: sonov2Logo },
+];
+
+const history = [
+  { date: '2021.06', title: 'YouTube配信開始', desc: 'YouTubeにて配信を開始' },
+  { date: '2022.04', title: '収益化達成', desc: 'チャンネル登録1,000人・収益化を達成' },
+  { date: '2023.05', title: 'YouTube登録3,000人到達', desc: 'YouTubeチャンネル登録者数3,000人を達成' },
+  { date: '2024.05', title: 'YouTube登録5,000人到達', desc: 'YouTubeチャンネル登録者数5,000人を達成' },
+  { date: '2024.10', title: 'そのぶいリリース', desc: 'VTuberおすすめサイト『そのぶい』をリリース' },
+  { date: '2025.05', title: 'うたぶるリリース', desc: '歌枠支援ツール『うたぶる』をリリース' },
+  { date: '2025.07', title: 'YouTube登録1万人達成', desc: 'YouTubeチャンネル登録10,000人を達成' },
+  { date: '2025.10', title: 'おしえーるリリース', desc: '推しが応援してくれるタイマー『おしえーる』をリリース' },
+  { date: '2025.11', title: '秋葉原井戸端洋酒店にてコラボバーを開催', desc: 'YouTubeチャンネル登録10,000人を記念して秋葉原井戸端洋酒店でコラボバーイベントを開催しました' },
+  { date: '2026.03', title: 'そのぶいつーリリース', desc: '癖でタグ検索しまくれるVTuberのWebサイト集『そのぶいつー』をリリース' },
+  { date: '2026.11', title: 'HACK.BARにてコラボイベントを開催', desc: 'HACK.BAR 心斎橋店で一日店長を務めました' },
+];
+const years = [...new Set(history.map((h) => h.date.slice(0, 4)))];
+
+const sections = [
+  { id: 'profile', label: 'Profile' },
+  { id: 'history', label: 'History' },
+  { id: 'works', label: 'Works' },
+  { id: 'gear', label: 'Gear' },
+];
+
+const arrowBtn = 'w-10 h-10 border border-ink flex items-center justify-center hover:bg-ink hover:text-paper transition-colors disabled:opacity-25 disabled:pointer-events-none';
 ---
 
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
   <link rel="icon" type="image/x-icon" href="/pera/favicon.ico" />
-  <meta name="viewport" content="width=device-width" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="generator" content={Astro.generator} />
   <title>宮乃やみ公式サイト</title>
+  <meta name="description" content="和装丸眼鏡VTuber・Webエンジニア 宮乃やみの公式サイト" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
   <style>
     @import "tailwindcss";
-    
-    html, body {
-      font-family: 'M PLUS Rounded 1c', sans-serif;
-      width: 100%;
+
+    @theme {
+      --color-paper: #fbfaf7;
+      --color-ink: #1d1d22;
+      --color-sumi: #4a4a52;
+      --color-mute: #8a8a90;
+      --color-line: #e3e0d8;
+      --color-gold: #a8862f;
+      --color-gold-deep: #7d6220;
+      --font-serif-en: 'Cormorant Garamond', serif;
+      --font-mincho: 'Shippori Mincho', serif;
+      --font-sans: 'Noto Sans JP', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 3.5rem;
+    }
+
+    body {
       margin: 0;
-      padding: 0;
+      background: var(--color-paper);
+      color: var(--color-ink);
+      font-family: var(--font-sans);
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      word-break: auto-phrase;
     }
 
-    .background-layer {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: -10;
-      background: #fefcfd;
+    .font-serif-en {
+      font-variant-numeric: lining-nums tabular-nums;
     }
 
-    .square {
-      position: absolute;
-      width: 288px;
-      height: 288px;
-      animation: float 36s linear infinite;
-    }
-
-    .filled-blue {
-      background: rgba(135, 206, 250, 0.6);
-    }
-
-    .filled-green {
-      background: rgba(144, 238, 144, 0.6);
-    }
-
-    .filled-pink {
-      background: rgba(255, 182, 193, 0.6);
-    }
-
-    .filled-yellow {
-      background: rgba(255, 255, 153, 0.6);
-    }
-
-    .outlined-blue {
-      background: transparent;
-      border: 4px solid rgba(135, 206, 250, 0.6);
-    }
-
-    .outlined-green {
-      background: transparent;
-      border: 4px solid rgba(144, 238, 144, 0.6);
-    }
-
-    .outlined-pink {
-      background: transparent;
-      border: 4px solid rgba(255, 182, 193, 0.6);
-    }
-
-    .outlined-yellow {
-      background: transparent;
-      border: 4px solid rgba(255, 255, 153, 0.6);
-    }
-
-    @keyframes float-up {
-      0% { transform: translateY(120vh) rotate(0deg); opacity: 0; }
-      30% { opacity: 1; }
-      70% { opacity: 1; }
-      100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
-    }
-
-    @keyframes float-down {
-      0% { transform: translateY(-20vh) rotate(0deg); opacity: 0; }
-      30% { opacity: 1; }
-      70% { opacity: 1; }
-      100% { transform: translateY(120vh) rotate(-360deg); opacity: 0; }
-    }
-
-    @keyframes float-left {
-      0% { transform: translateX(120vw) rotate(0deg); opacity: 0; }
-      30% { opacity: 1; }
-      70% { opacity: 1; }
-      100% { transform: translateX(-20vw) rotate(360deg); opacity: 0; }
-    }
-
-    @keyframes float-right {
-      0% { transform: translateX(-20vw) rotate(0deg); opacity: 0; }
-      30% { opacity: 1; }
-      70% { opacity: 1; }
-      100% { transform: translateX(120vw) rotate(-360deg); opacity: 0; }
-    }
-
-    /* Loading animation styles */
-    .loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: #fefcfd;
+    /* 横スクロール領域：スクロールバーを隠してスナップさせる */
+    .track {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      opacity: 1;
-      transition: opacity 0.4s ease-out;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      overscroll-behavior-x: contain;
     }
+    .track::-webkit-scrollbar { display: none; }
+    .track > * { scroll-snap-align: start; flex-shrink: 0; }
 
-    .loading-overlay.fade-out {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .loading-dots {
-      display: flex;
-      gap: 8px;
-    }
-
-    .loading-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #a855f7;
-      animation: mybounce 1.6s ease-in-out infinite both;
-    }
-
-    .loading-dot:nth-child(1) { animation-delay: -0.32s; }
-    .loading-dot:nth-child(2) { animation-delay: -0.16s; }
-    .loading-dot:nth-child(3) { animation-delay: 0s; }
-
-    @keyframes mybounce {
-      0%, 90%, 100% { 
-        transform: translateY(0px) scale(1);
-      } 
-      45% { 
-        transform: translateY(-10px) scale(1);
-      }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
     }
   </style>
 </head>
 <body>
-  <!-- Loading overlay -->
-  <div class="loading-overlay" id="loading-overlay">
-    <div class="loading-dots">
-      <div class="loading-dot"></div>
-      <div class="loading-dot"></div>
-      <div class="loading-dot"></div>
+  <!-- ナビゲーション -->
+  <nav class="fixed inset-x-0 top-0 z-50 bg-paper/90 backdrop-blur-sm border-b border-line">
+    <div class="max-w-6xl mx-auto h-14 px-4 md:px-8 flex items-center justify-between">
+      <a href="#top" class="font-serif-en text-base md:text-lg tracking-[0.2em] md:tracking-[0.3em] text-ink whitespace-nowrap">MIYANO YAMI</a>
+      <div class="flex items-center gap-6">
+        <ul class="hidden md:flex items-center gap-6 font-serif-en text-sm tracking-[0.2em] text-sumi">
+          {sections.map((s) => (
+            <li><a href={`#${s.id}`} class="hover:text-gold-deep transition-colors">{s.label.toUpperCase()}</a></li>
+          ))}
+        </ul>
+        <span class="hidden md:block w-px h-4 bg-line"></span>
+        <ul class="flex items-center gap-4 text-ink">
+          <li>
+            <a href="https://www.youtube.com/@miyanoyami" target="_blank" rel="noopener" aria-label="YouTube" class="block hover:text-gold-deep transition-colors">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+          </li>
+          <li>
+            <a href="https://x.com/miyanoyami83" target="_blank" rel="noopener" aria-label="X" class="block hover:text-gold-deep transition-colors">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/miyanoyami" target="_blank" rel="noopener" aria-label="GitHub" class="block hover:text-gold-deep transition-colors">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+            </a>
+          </li>
+          <li>
+            <a href="/pera/blog" class="font-serif-en text-sm tracking-[0.2em] border border-ink px-3 py-1 hover:bg-ink hover:text-paper transition-colors">BLOG</a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
+  </nav>
 
-  <div class="min-h-screen relative w-full mx-auto">
-    <div class="background-layer" id="background"></div>
-    
-    <div class="relative z-10">
-      <!-- 固定ナビゲーションバー -->
-      <nav class="fixed top-0 left-0 right-0 z-50 bg-white/30 backdrop-blur-sm border-b border-gray-200/30">
-        <div class="flex justify-end items-center h-12 pr-4">
-            <!-- 右側のアイコン群 -->
-            <div class="flex space-x-4">
-              <a href="https://www.youtube.com/@miyanoyami" target="_blank" class="w-8 h-8 md:w-10 md:h-10 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center shadow-lg transition-colors">
-                <svg viewBox="0 0 24 24" fill="white" class="w-4 h-4 md:w-5 md:h-5">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-              </a>
-              <a href="https://x.com/miyanoyami83" target="_blank" class="w-8 h-8 md:w-10 md:h-10 bg-black hover:bg-gray-800 rounded-full flex items-center justify-center shadow-lg transition-colors">
-                <svg viewBox="0 0 24 24" fill="white" class="w-4 h-4 md:w-5 md:h-5">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-              </a>
-              <a href="https://github.com/miyanoyami" target="_blank" class="w-8 h-8 md:w-10 md:h-10 bg-gray-900 hover:bg-gray-700 rounded-full flex items-center justify-center shadow-lg transition-colors">
-                <svg viewBox="0 0 24 24" fill="white" class="w-4 h-4 md:w-5 md:h-5">
-                  <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
-                </svg>
-              </a>
-              <a href="/pera/blog" class="w-8 h-8 md:w-10 md:h-10 bg-white hover:bg-gray-100 rounded-full flex items-center justify-center shadow-lg transition-colors border border-gray-200">
-                <svg viewBox="0 0 24 24" fill="none" class="w-5 h-5 md:w-6 md:h-6">
-                  <rect x="5" y="3" width="12" height="16" rx="1" stroke="#6B4423" stroke-width="1.5"/>
-                  <line x1="7" y1="7" x2="13" y2="7" stroke="#6B4423" stroke-width="1.3" stroke-linecap="round"/>
-                  <line x1="7" y1="10" x2="13" y2="10" stroke="#6B4423" stroke-width="1.3" stroke-linecap="round"/>
-                  <line x1="7" y1="13" x2="10" y2="13" stroke="#6B4423" stroke-width="1.3" stroke-linecap="round"/>
-                  <path d="M14 14l5.5 5.5m-1-5l1 5 5 1-5.5-5.5z" fill="#6B4423" stroke="#6B4423" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-      </nav>
-
-      <header class="w-full relative">
-        <div class="relative w-full">
-          <img src={coverImage.src} alt="宮乃やみ" class="w-full h-auto object-cover" style="min-height: 80vh;">
-          <div class="absolute inset-0 flex justify-center" style="align-items: flex-end; padding-bottom: 10%;">
-            <div class="text-center px-4">
-              <img src={nameLogo.src} alt="宮乃やみ" class="mx-auto max-w-lg md:max-w-xl lg:max-w-2xl h-auto">
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <section class="py-20 px-4 max-w-7xl mx-auto">
-        <div class="text-center mb-16">
-          <h2 class="text-4xl font-bold text-gray-800 mb-4">プロフィール</h2>
-          <div class="w-24 h-1 bg-purple-400 mx-auto rounded-full"></div>
-        </div>
-        
-        <div class="grid lg:grid-cols-3 gap-12 items-start">
-          <div class="lg:order-2 flex flex-col items-center lg:items-start space-y-6 px-2 lg:px-0">
-            <div class="relative">
-              <div class="absolute inset-0 bg-purple-100 rounded-3xl transform rotate-3"></div>
-              <div class="relative bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-xl">
-                <img id="character-image" src={mainImage.src} alt="宮乃やみ立ち絵" class="w-72 md:w-80 lg:w-88 xl:w-104 h-auto cursor-pointer transition-all duration-300 hover:scale-105 rounded-2xl">
-              </div>
-            </div>
-            
-            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-100 w-full max-w-sm lg:max-w-none pr-0">
-              <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <span class="w-2 h-8 bg-purple-400 rounded-full mr-4"></span>
-                クリエイター
-                <span class="text-xs text-gray-500 ml-2">※敬称略</span>
-              </h3>
-              <div class="space-y-3 text-sm text-gray-700">
-                <div>
-                  <span class="font-semibold">キャラクターデザイン</span><br>
-                  <span class="text-gray-600">カロク@Schwarz_jihua</span>
-                </div>
-                <div>
-                  <span class="font-semibold">イラスト・モデリング</span><br>
-                  <span class="text-gray-600">黒山シープ@DYNAMIC_MAKKY</span>
-                </div>
-                <div>
-                  <span class="font-semibold">カバーイラスト</span><br>
-                  <span class="text-gray-600">衿崎@erisaki_coda</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="lg:col-span-2 lg:order-1 space-y-8">
-            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-gray-100">
-              <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <span class="w-2 h-8 bg-purple-400 rounded-full mr-4"></span>
-                基本情報
-              </h3>
-              <div class="grid md:grid-cols-2 gap-6">
-                <div class="space-y-4">
-                  <div class="flex items-start space-x-3">
-                    <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <span class="font-semibold text-gray-700">名前</span>
-                      <p class="text-gray-600">宮乃やみ（みやのやみ）</p>
-                    </div>
-                  </div>
-                  <div class="flex items-start space-x-3">
-                    <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <span class="font-semibold text-gray-700">英名</span>
-                      <p class="text-gray-600">miyanoyami</p>
-                    </div>
-                  </div>
-                  <div class="flex items-start space-x-3">
-                    <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <span class="font-semibold text-gray-700">出身地</span>
-                      <p class="text-gray-600">北海道</p>
-                    </div>
-                  </div>
-                  <div class="flex items-start space-x-3">
-                    <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <span class="font-semibold text-gray-700">誕生日</span>
-                      <p class="text-gray-600">7月12日</p>
-                    </div>
-                  </div>
-                  <div class="flex items-start space-x-3">
-                    <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <span class="font-semibold text-gray-700">言語</span>
-                      <p class="text-gray-600">日本語・英語</p>
-                    </div>
-                  </div>
-                  <div class="flex items-start space-x-3">
-                    <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <span class="font-semibold text-gray-700">属性</span>
-                      <p class="text-gray-600">和装丸眼鏡VTuber</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="space-y-4">
-                  <div class="flex items-start space-x-3">
-                    <div class="w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <span class="font-semibold text-gray-700">職業</span>
-                      <p class="text-gray-600">Webエンジニア</p>
-                    </div>
-                  </div>
-                  <div class="flex items-start space-x-3">
-                    <div class="w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <span class="font-semibold text-gray-700">専門領域</span>
-                      <p class="text-gray-600">大規模バックエンド・金融</p>
-                    </div>
-                  </div>
-                  <div class="flex items-start space-x-3">
-                    <div class="w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <span class="font-semibold text-gray-700">資格</span>
-                      <p class="text-gray-600">情報処理技術者試験12冠</p>
-                    </div>
-                  </div>
-                  <div class="flex items-start space-x-3">
-                    <div class="w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <span class="font-semibold text-gray-700">好きなお酒</span>
-                      <p class="text-gray-600">クラフトビール・ウイスキー</p>
-                    </div>
-                  </div>
-                  <div class="flex items-start space-x-3">
-                    <div class="w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <span class="font-semibold text-gray-700">創作活動</span>
-                      <p class="text-gray-600">VTuber向けWebサイトを複数開発・運営</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-gray-100">
-              <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <span class="w-2 h-8 bg-purple-400 rounded-full mr-4"></span>
-                プログラミング言語
-              </h3>
-              <div class="space-y-6">
-                <div>
-                  <p class="text-xs font-semibold tracking-widest text-purple-500 mb-3">MAIN</p>
-                  <div class="flex flex-wrap gap-3">
-                    <span class="px-5 py-2.5 bg-purple-500 text-white rounded-full text-base font-bold shadow-md shadow-purple-200">Go</span>
-                    <span class="px-5 py-2.5 bg-purple-500 text-white rounded-full text-base font-bold shadow-md shadow-purple-200">Java</span>
-                    <span class="px-5 py-2.5 bg-purple-500 text-white rounded-full text-base font-bold shadow-md shadow-purple-200">Kotlin</span>
-                  </div>
-                </div>
-                <div>
-                  <p class="text-xs font-semibold tracking-widest text-gray-400 mb-3">OTHERS</p>
-                  <div class="flex flex-wrap gap-2">
-                    <span class="px-3 py-1.5 bg-white text-gray-600 border border-gray-200 rounded-full text-sm">PHP</span>
-                    <span class="px-3 py-1.5 bg-white text-gray-600 border border-gray-200 rounded-full text-sm">Ruby</span>
-                    <span class="px-3 py-1.5 bg-white text-gray-600 border border-gray-200 rounded-full text-sm">Scala</span>
-                    <span class="px-3 py-1.5 bg-white text-gray-600 border border-gray-200 rounded-full text-sm">Scheme</span>
-                    <span class="px-3 py-1.5 bg-white text-gray-600 border border-gray-200 rounded-full text-sm">JavaScript</span>
-                    <span class="px-3 py-1.5 bg-white text-gray-600 border border-gray-200 rounded-full text-sm">TypeScript</span>
-                    <span class="px-3 py-1.5 bg-white text-gray-600 border border-gray-200 rounded-full text-sm">Python</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-          </div>
-
-          </div>
-        
-        <div class="max-w-5xl mx-auto px-4 mt-16">
-          <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold text-gray-800 mb-4 relative z-10">使用機材</h2>
-            <div class="w-24 h-1 bg-purple-400 mx-auto rounded-full"></div>
-          </div>
-
-          <div class="grid md:grid-cols-2 gap-8">
-            <!-- 配信機材 -->
-            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-gray-100">
-              <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <span class="w-2 h-8 bg-purple-400 rounded-full mr-4"></span>
-                配信機材
-              </h3>
-              <div class="space-y-4">
-                <div class="flex items-start space-x-3">
-                  <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                  <div class="flex-1">
-                    <span class="font-semibold text-gray-700 block mb-1">CPU</span>
-                    <p class="text-gray-600 text-sm">Intel Core i7-13700KF</p>
-                  </div>
-                </div>
-                <div class="flex items-start space-x-3">
-                  <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                  <div class="flex-1">
-                    <span class="font-semibold text-gray-700 block mb-1">GPU</span>
-                    <p class="text-gray-600 text-sm">NVIDIA GeForce RTX 3070</p>
-                  </div>
-                </div>
-                <div class="flex items-start space-x-3">
-                  <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                  <div class="flex-1">
-                    <span class="font-semibold text-gray-700 block mb-1">メモリ</span>
-                    <p class="text-gray-600 text-sm">64GB</p>
-                  </div>
-                </div>
-                <div class="flex items-start space-x-3">
-                  <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                  <div class="flex-1">
-                    <span class="font-semibold text-gray-700 block mb-1">ストレージ</span>
-                    <p class="text-gray-600 text-sm">SSD 2TB</p>
-                  </div>
-                </div>
-                <div class="flex items-start space-x-3">
-                  <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                  <div class="flex-1">
-                    <span class="font-semibold text-gray-700 block mb-1">マイク</span>
-                    <p class="text-gray-600 text-sm">audio-technica AT4040</p>
-                  </div>
-                </div>
-                <div class="flex items-start space-x-3">
-                  <div class="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                  <div class="flex-1">
-                    <span class="font-semibold text-gray-700 block mb-1">オーディオI/F</span>
-                    <p class="text-gray-600 text-sm">Steinberg UR44C</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 開発機材 -->
-            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-gray-100">
-              <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <span class="w-2 h-8 bg-purple-400 rounded-full mr-4"></span>
-                開発機材
-              </h3>
-              <div class="space-y-4">
-                <div class="flex items-start space-x-3">
-                  <div class="w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0"></div>
-                  <div class="flex-1">
-                    <span class="font-semibold text-gray-700 block mb-1">モデル</span>
-                    <p class="text-gray-600 text-sm">MacBook Air M4</p>
-                  </div>
-                </div>
-                <div class="flex items-start space-x-3">
-                  <div class="w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0"></div>
-                  <div class="flex-1">
-                    <span class="font-semibold text-gray-700 block mb-1">メモリ</span>
-                    <p class="text-gray-600 text-sm">24GB ユニファイドメモリ</p>
-                  </div>
-                </div>
-                <div class="flex items-start space-x-3">
-                  <div class="w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0"></div>
-                  <div class="flex-1">
-                    <span class="font-semibold text-gray-700 block mb-1">ストレージ</span>
-                    <p class="text-gray-600 text-sm">SSD 256GB</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="py-16 px-4">
-        <div class="max-w-4xl mx-auto text-center">
-          <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold text-gray-800 mb-4 relative z-10">運営サイト</h2>
-            <div class="w-24 h-1 bg-purple-400 mx-auto rounded-full"></div>
-          </div>
-          <div class="grid md:grid-cols-2 gap-8">
-            <a href="https://miyanoyami.github.io/sonorv/" target="_blank" class="bg-white/80 backdrop-blur-sm hover:bg-white/90 p-8 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl group">
-              <div class="flex items-center justify-center mb-4">
-                <img src={sonovLogo.src} alt="そのぶい" class="h-16 w-auto">
-              </div>
-              <h3 class="font-bold text-gray-800 mb-2 text-lg">そのぶい</h3>
-              <p class="text-gray-600 text-sm">VTuberおすすめサイト</p>
-            </a>
-            <a href="https://utable.pages.dev/" target="_blank" class="bg-white/80 backdrop-blur-sm hover:bg-white/90 p-8 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl group">
-              <div class="flex items-center justify-center mb-4">
-                <img src={utableLogo.src} alt="うたぶる" class="h-16 w-auto">
-              </div>
-              <h3 class="font-bold text-gray-800 mb-2 text-lg">うたぶる</h3>
-              <p class="text-gray-600 text-sm">歌枠支援ツール</p>
-            </a>
-            <a href="https://miyanoyami.github.io/vtimer/" target="_blank" class="bg-white/80 backdrop-blur-sm hover:bg-white/90 p-8 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl group">
-              <div class="flex items-center justify-center mb-4">
-                <img src={oshiyellLogo.src} alt="おしえーる" class="h-16 w-auto">
-              </div>
-              <h3 class="font-bold text-gray-800 mb-2 text-lg">おしえーる</h3>
-              <p class="text-gray-600 text-sm">推しが応援してくれるポモドーロタイマー</p>
-            </a>
-
-            <a href="https://sonov2.vtube.work/" target="_blank" class="bg-white/80 backdrop-blur-sm hover:bg-white/90 p-8 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl group">
-              <div class="flex items-center justify-center mb-4">
-                <img src={sonov2Logo.src} alt="そのぶいつー" class="h-16 w-auto">
-              </div>
-              <h3 class="font-bold text-gray-800 mb-2 text-lg">そのぶいつー</h3>
-              <p class="text-gray-600 text-sm">癖でタグ検索しまくれるVTuberのWebサイト集</p>
-            </a>
-
-          </div>
-        </div>
-      </section>
-
-
-      <section class="py-16 px-4">
-        <div class="max-w-5xl mx-auto">
-          <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold text-gray-800 mb-4 relative z-10">活動歴</h2>
-            <div class="w-24 h-1 bg-purple-400 mx-auto rounded-full"></div>
-          </div>
-          <div class="relative">
-            <!-- デスクトップ用の中央縦線 -->
-            <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-purple-400"></div>
-            <!-- スマホ用の左寄り縦線 -->
-            <div class="md:hidden absolute left-6 w-0.5 h-full bg-purple-400"></div>
-            
-            <div class="space-y-8 md:space-y-16">
-              <!-- 2021年6月 -->
-              <div class="relative">
-                <!-- デスクトップ用レイアウト -->
-                <div class="hidden md:flex items-center">
-                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
-                  <div class="w-1/2 pr-8 text-right">
-                    <div class="relative">
-                      <div class="absolute right-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
-                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg mr-10 border border-purple-100">
-                        <div class="text-purple-600 font-bold text-sm mb-2">2021年6月</div>
-                        <h3 class="font-bold text-gray-800 mb-1">YouTube配信開始</h3>
-                        <p class="text-gray-600 text-sm">YouTubeにて配信を開始</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="w-1/2"></div>
-                </div>
-                <!-- スマホ用レイアウト -->
-                <div class="md:hidden flex items-center">
-                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
-                  <div class="ml-12 w-full">
-                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
-                      <div class="text-purple-600 font-bold text-xs mb-1">2021年6月</div>
-                      <h3 class="font-bold text-gray-800 text-sm mb-1">YouTube配信開始</h3>
-                      <p class="text-gray-600 text-xs">YouTubeにて配信を開始</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 2022年4月 -->
-              <div class="relative">
-                <!-- デスクトップ用レイアウト -->
-                <div class="hidden md:flex items-center">
-                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
-                  <div class="w-1/2"></div>
-                  <div class="w-1/2 pl-8 text-left">
-                    <div class="relative">
-                      <div class="absolute left-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
-                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg ml-10 border border-purple-100">
-                        <div class="text-purple-600 font-bold text-sm mb-2">2022年4月</div>
-                        <h3 class="font-bold text-gray-800 mb-1">収益化達成</h3>
-                        <p class="text-gray-600 text-sm">チャンネル登録1,000人・収益化を達成</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- スマホ用レイアウト -->
-                <div class="md:hidden flex items-center">
-                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
-                  <div class="ml-12 w-full">
-                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
-                      <div class="text-purple-600 font-bold text-xs mb-1">2022年4月</div>
-                      <h3 class="font-bold text-gray-800 text-sm mb-1">収益化達成</h3>
-                      <p class="text-gray-600 text-xs">チャンネル登録1,000人・収益化を達成</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 2023年5月 -->
-              <div class="relative">
-                <!-- デスクトップ用レイアウト -->
-                <div class="hidden md:flex items-center">
-                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
-                  <div class="w-1/2 pr-8 text-right">
-                    <div class="relative">
-                      <div class="absolute right-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
-                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg mr-10 border border-purple-100">
-                        <div class="text-purple-600 font-bold text-sm mb-2">2023年5月</div>
-                        <h3 class="font-bold text-gray-800 mb-1">YouTube登録3,000人到達</h3>
-                        <p class="text-gray-600 text-sm">YouTubeチャンネル登録者数3,000人を達成</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="w-1/2"></div>
-                </div>
-                <!-- スマホ用レイアウト -->
-                <div class="md:hidden flex items-center">
-                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
-                  <div class="ml-12 w-full">
-                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
-                      <div class="text-purple-600 font-bold text-xs mb-1">2023年5月</div>
-                      <h3 class="font-bold text-gray-800 text-sm mb-1">YouTube3,000人到達</h3>
-                      <p class="text-gray-600 text-xs">YouTubeチャンネル登録者数3,000人を達成</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 2024年5月 -->
-              <div class="relative">
-                <!-- デスクトップ用レイアウト -->
-                <div class="hidden md:flex items-center">
-                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
-                  <div class="w-1/2"></div>
-                  <div class="w-1/2 pl-8 text-left">
-                    <div class="relative">
-                      <div class="absolute left-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
-                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg ml-10 border border-purple-100">
-                        <div class="text-purple-600 font-bold text-sm mb-2">2024年5月</div>
-                        <h3 class="font-bold text-gray-800 mb-1">YouTube5,000人到達</h3>
-                        <p class="text-gray-600 text-sm">YouTubeチャンネル登録者数5,000人を達成</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- スマホ用レイアウト -->
-                <div class="md:hidden flex items-center">
-                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
-                  <div class="ml-12 w-full">
-                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
-                      <div class="text-purple-600 font-bold text-xs mb-1">2024年5月</div>
-                      <h3 class="font-bold text-gray-800 text-sm mb-1">YouTube登録5,000人到達</h3>
-                      <p class="text-gray-600 text-xs">YouTubeチャンネル登録5,000人を達成</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 2024年10月 -->
-              <div class="relative">
-                <!-- デスクトップ用レイアウト -->
-                <div class="hidden md:flex items-center">
-                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
-                  <div class="w-1/2 pr-8 text-right">
-                    <div class="relative">
-                      <div class="absolute right-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
-                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg mr-10 border border-purple-100">
-                        <div class="text-purple-600 font-bold text-sm mb-2">2024年10月</div>
-                        <h3 class="font-bold text-gray-800 mb-1">そのぶいリリース</h3>
-                        <p class="text-gray-600 text-sm">VTuberおすすめサイト『そのぶい』をリリース</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="w-1/2"></div>
-                </div>
-                <!-- スマホ用レイアウト -->
-                <div class="md:hidden flex items-center">
-                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
-                  <div class="ml-12 w-full">
-                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
-                      <div class="text-purple-600 font-bold text-xs mb-1">2024年10月</div>
-                      <h3 class="font-bold text-gray-800 text-sm mb-1">そのぶいリリース</h3>
-                      <p class="text-gray-600 text-xs">VTuberおすすめサイト『そのぶい』をリリース</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 2025年5月 -->
-              <div class="relative">
-                <!-- デスクトップ用レイアウト -->
-                <div class="hidden md:flex items-center">
-                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
-                  <div class="w-1/2"></div>
-                  <div class="w-1/2 pl-8 text-left">
-                    <div class="relative">
-                      <div class="absolute left-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
-                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg ml-10 border border-purple-100">
-                        <div class="text-purple-600 font-bold text-sm mb-2">2025年5月</div>
-                        <h3 class="font-bold text-gray-800 mb-1">うたぶるリリース</h3>
-                        <p class="text-gray-600 text-sm">歌枠支援ツール『うたぶる』をリリース</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- スマホ用レイアウト -->
-                <div class="md:hidden flex items-center">
-                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
-                  <div class="ml-12 w-full">
-                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
-                      <div class="text-purple-600 font-bold text-xs mb-1">2025年5月</div>
-                      <h3 class="font-bold text-gray-800 text-sm mb-1">うたぶるリリース</h3>
-                      <p class="text-gray-600 text-xs">歌枠支援ツール『うたぶる』をリリース</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 2025年7月 -->
-              <div class="relative">
-                <!-- デスクトップ用レイアウト -->
-                <div class="hidden md:flex items-center">
-                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
-                  <div class="w-1/2 pr-8 text-right">
-                    <div class="relative">
-                      <div class="absolute right-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
-                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg mr-10 border border-purple-100">
-                        <div class="text-purple-600 font-bold text-sm mb-2">2025年7月</div>
-                        <h3 class="font-bold text-gray-800 mb-1">YouTube登録1万人達成</h3>
-                        <p class="text-gray-600 text-sm">YouTubeチャンネル登録10,000人を達成</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="w-1/2"></div>
-                </div>
-                <!-- スマホ用レイアウト -->
-                <div class="md:hidden flex items-center">
-                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
-                  <div class="ml-12 w-full">
-                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
-                      <div class="text-purple-600 font-bold text-xs mb-1">2025年7月</div>
-                      <h3 class="font-bold text-gray-800 text-sm mb-1">YouTube登録1万人達成</h3>
-                      <p class="text-gray-600 text-xs">YouTubeチャンネル登録10,000人を達成</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 2025年10月 -->
-              <div class="relative">
-                <!-- デスクトップ用レイアウト -->
-                <div class="hidden md:flex items-center">
-                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
-                  <div class="w-1/2"></div>
-                  <div class="w-1/2 pl-8 text-left">
-                    <div class="relative">
-                      <div class="absolute left-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
-                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg ml-10 border border-purple-100">
-                        <div class="text-purple-600 font-bold text-sm mb-2">2025年10月</div>
-                        <h3 class="font-bold text-gray-800 mb-1">おしえーるリリース</h3>
-                        <p class="text-gray-600 text-sm">推しが応援してくれるタイマー『おしえーる』をリリース</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- スマホ用レイアウト -->
-                <div class="md:hidden flex items-center">
-                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
-                  <div class="ml-12 w-full">
-                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
-                      <div class="text-purple-600 font-bold text-xs mb-1">2025年10月</div>
-                      <h3 class="font-bold text-gray-800 text-sm mb-1">おしえーるリリース</h3>
-                      <p class="text-gray-600 text-xs">推しが応援してくれるタイマー『おしえーる』をリリース</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 2025年11月 -->
-              <div class="relative">
-                <!-- デスクトップ用レイアウト -->
-                <div class="hidden md:flex items-center">
-                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
-                  <div class="w-1/2 pr-8 text-right">
-                    <div class="relative">
-                      <div class="absolute right-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
-                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg mr-10 border border-purple-100">
-                        <div class="text-purple-600 font-bold text-sm mb-2">2025年11月</div>
-                        <h3 class="font-bold text-gray-800 mb-1">秋葉原井戸端洋酒店にてコラボバーを開催</h3>
-                        <p class="text-gray-600 text-sm">YouTubeチャンネル登録10,000人を記念して秋葉原井戸端洋酒店でコラボバーイベントを開催しました</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="w-1/2"></div>
-                </div>
-                <!-- スマホ用レイアウト -->
-                <div class="md:hidden flex items-center">
-                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
-                  <div class="ml-12 w-full">
-                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
-                      <div class="text-purple-600 font-bold text-xs mb-1">2025年11月</div>
-                      <h3 class="font-bold text-gray-800 text-sm mb-1">秋葉原井戸端洋酒店にてコラボバーを開催</h3>
-                      <p class="text-gray-600 text-xs">YouTubeチャンネル登録10,000人を記念して秋葉原井戸端洋酒店でコラボバーイベントを開催しました</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-
-              <!-- 2026年3月 -->
-              <div class="relative">
-                <!-- デスクトップ用レイアウト -->
-                <div class="hidden md:flex items-center">
-                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
-                  <div class="w-1/2"></div>
-                  <div class="w-1/2 pl-8 text-left">
-                    <div class="relative">
-                      <div class="absolute left-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
-                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg ml-10 border border-purple-100">
-                        <div class="text-purple-600 font-bold text-sm mb-2">2026年3月</div>
-                        <h3 class="font-bold text-gray-800 mb-1">そのぶいつーリリース</h3>
-                        <p class="text-gray-600 text-sm">癖でタグ検索しまくれるVTuberのWebサイト集『そのぶいつー』をリリース</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- スマホ用レイアウト -->
-                <div class="md:hidden flex items-center">
-                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
-                  <div class="ml-12 w-full">
-                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
-                      <div class="text-purple-600 font-bold text-xs mb-1">2026年3月</div>
-                      <h3 class="font-bold text-gray-800 text-sm mb-1">そのぶいつーリリース</h3>
-                      <p class="text-gray-600 text-xs">癖でタグ検索しまくれるVTuberのWebサイト集『そのぶいつー』をリリース</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 2026年11月 -->
-              <div class="relative">
-                <!-- デスクトップ用レイアウト -->
-                <div class="hidden md:flex items-center">
-                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-lg z-10"></div>
-                  <div class="w-1/2 pr-8 text-right">
-                    <div class="relative">
-                      <div class="absolute right-0 top-1/2 w-8 h-0.5 bg-purple-400"></div>
-                      <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg mr-10 border border-purple-100">
-                        <div class="text-purple-600 font-bold text-sm mb-2">2026年11月</div>
-                        <h3 class="font-bold text-gray-800 mb-1">HACK.BARにてコラボイベントを開催</h3>
-                        <p class="text-gray-600 text-sm">HACK.BAR 心斎橋店で一日店長を務めました</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="w-1/2"></div>
-                </div>
-                <!-- スマホ用レイアウト -->
-                <div class="md:hidden flex items-center">
-                  <div class="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full border-3 border-white shadow-lg z-10"></div>
-                  <div class="ml-12 w-full">
-                    <div class="bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-purple-100">
-                      <div class="text-purple-600 font-bold text-xs mb-1">2026年11月</div>
-                      <h3 class="font-bold text-gray-800 text-sm mb-1">HACK.BARにてコラボイベントを開催</h3>
-                      <p class="text-gray-600 text-xs">HACK.BAR 心斎橋店で一日店長を務めました</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <footer class="py-8 px-4 bg-gray-800 text-white text-center">
-        <p>&copy; 宮乃やみ all rights reserved.</p>
-      </footer>
+  <!-- ヘッダー画像＋名前 -->
+  <header id="top" class="pt-14">
+    <img src={coverImage.src} alt="宮乃やみ カバーイラスト" class="w-full h-[60vh] md:h-[calc(100vh-3.5rem)] object-cover object-[82%_center] md:object-[70%_center]">
+    <div class="border-b border-line">
+      <div class="max-w-6xl mx-auto px-4 md:px-8 py-6 md:py-8 flex items-center gap-5 md:gap-10">
+        <img src={nameLogo.src} alt="宮乃やみ miyano yami" class="w-36 md:w-52 aspect-[16/7] object-cover shrink-0">
+        <span class="hidden md:block w-px self-stretch bg-line"></span>
+        <p class="font-mincho text-sm md:text-lg leading-relaxed">和装丸眼鏡VTuber。<br class="md:hidden">金融専門の<wbr>Webエンジニア。</p>
+      </div>
     </div>
-  </div>
+  </header>
 
-  <script define:vars={{mainImageSrc: mainImage.src, mainImage2Src: mainImage2.src}}>
-    // Loading animation control
-    window.addEventListener('load', function() {
-      const loadingOverlay = document.getElementById('loading-overlay');
+  <main>
+    <!-- PROFILE：立ち絵＋スライドカード -->
+    <section id="profile" class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
+      <div class="grid grid-cols-[minmax(0,1fr)] md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-8 md:gap-14 items-center">
+        <div class="flex justify-center">
+          <img id="character-image" src={mainImage.src} alt="宮乃やみ 立ち絵（タップ・ホバーで切り替え）" class="h-[300px] md:h-[560px] w-auto cursor-pointer select-none" width="1000" height="1500">
+        </div>
 
-      // Show loading for 0.8 seconds
-      setTimeout(function() {
-        loadingOverlay.classList.add('fade-out');
+        <div data-carousel>
+          <div class="flex items-baseline justify-between mb-6">
+            <h2 class="font-serif-en text-4xl md:text-5xl tracking-[0.15em]">PROFILE</h2>
+            <span class="font-serif-en text-sm text-mute"><span data-current>01</span> / {String(profileCards.length).padStart(2, '0')}</span>
+          </div>
 
-        // Remove from DOM after fade out animation completes
-        setTimeout(function() {
-          loadingOverlay.style.display = 'none';
-        }, 400);
-      }, 800);
-    });
+          <!-- カード名のタブ（スライド位置と連動） -->
+          <div class="track gap-x-4 md:gap-x-5 mb-4 font-serif-en text-xs md:text-sm tracking-[0.12em] md:tracking-[0.2em]" role="tablist">
+            {profileCards.map((c, i) => (
+              <button type="button" data-dot={i} role="tab" class="pb-1 border-b-2 border-transparent text-mute hover:text-ink transition-colors aria-selected:border-gold aria-selected:text-ink">{c.key}</button>
+            ))}
+          </div>
 
-    const directions = ['float-up', 'float-down', 'float-left', 'float-right'];
-    const colorClasses = [
-        'filled-blue', 'filled-green', 'filled-pink', 'filled-yellow',
-        'outlined-blue', 'outlined-green', 'outlined-pink', 'outlined-yellow'
-    ];
-    const background = document.getElementById('background');
-    for (let i = 0; i < 6; i++) {
-        const square = document.createElement('div');
-        square.classList.add('square');
-        square.classList.add(colorClasses[i % colorClasses.length]);
-        square.style.left = Math.random() * 100 + 'vw';
-        square.style.top = Math.random() * 100 + 'vh';
-        square.style.animationName = directions[Math.floor(Math.random() * directions.length)];
-        square.style.animationDuration = (36 + Math.random() * 10) + 's';
-        background.appendChild(square);
-    }
+          <div data-track class="track border border-ink bg-white" tabindex="0" aria-label="プロフィールカード">
+            {profileCards.map((c) => (
+              <div class="w-full p-6 md:p-10 min-h-[340px]">
+                {c.items && (
+                  <dl class="space-y-4">
+                    {c.items.map((p) => (
+                      <div class="grid grid-cols-[6.5rem_1fr] gap-4 pb-4 border-b border-line last:border-0 last:pb-0">
+                        <dt class="font-mincho text-sm text-mute">{p.label}</dt>
+                        <dd>{p.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+                {c.key === 'SKILLS' && (
+                  <div class="space-y-8">
+                    <div>
+                      <p class="font-serif-en text-xs tracking-[0.3em] text-gold-deep mb-4">MAIN</p>
+                      <ul class="flex flex-wrap gap-x-8 gap-y-3">
+                        {mainLanguages.map((lang) => (
+                          <li class="border-l-4 border-gold pl-3 font-serif-en text-4xl font-semibold leading-none">{lang}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <p class="font-serif-en text-xs tracking-[0.3em] text-mute mb-3">OTHERS</p>
+                      <ul class="flex flex-wrap gap-2">
+                        {otherLanguages.map((lang) => (
+                          <li class="border border-line px-3 py-1 text-sm text-sumi">{lang}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )}
+                {c.key === 'CREATORS' && (
+                  <ul class="space-y-5">
+                    {creators.map((cr) => (
+                      <li class="pb-5 border-b border-line last:border-0 last:pb-0">
+                        <p class="text-xs text-mute mb-1">{cr.role}</p>
+                        <p class="flex items-baseline gap-3">
+                          <span class="font-mincho text-lg">{cr.name}</span>
+                          <a href={`https://x.com/${cr.handle}`} target="_blank" rel="noopener" class="text-xs text-gold-deep hover:underline">@{cr.handle}</a>
+                        </p>
+                      </li>
+                    ))}
+                    <li class="text-xs text-mute">※敬称略</li>
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
 
-    // Character image switching
+          <div class="flex justify-end gap-2 mt-4">
+            <button type="button" data-prev class={arrowBtn} aria-label="前へ">←</button>
+            <button type="button" data-next class={arrowBtn} aria-label="次へ">→</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HISTORY：横スクロールの年表 -->
+    <section id="history" class="bg-ink text-paper py-16 md:py-24 overflow-hidden" data-carousel data-start="end">
+      <div class="max-w-6xl mx-auto px-4 md:px-8">
+        <div class="flex flex-wrap items-end justify-between gap-6 mb-10">
+          <h2 class="font-serif-en text-4xl md:text-5xl tracking-[0.15em]">HISTORY</h2>
+          <div class="flex items-center gap-4">
+            <ul class="flex flex-wrap gap-x-4 gap-y-1 font-serif-en text-lg">
+              {years.map((y) => (
+                <li><button type="button" data-year={y} class="text-mute hover:text-paper transition-colors data-[active]:text-gold">{y}</button></li>
+              ))}
+            </ul>
+            <div class="hidden md:flex gap-2">
+              <button type="button" data-prev class={arrowBtn.replaceAll('ink', 'paper').replace('hover:text-paper', 'hover:text-ink')} aria-label="前へ">←</button>
+              <button type="button" data-next class={arrowBtn.replaceAll('ink', 'paper').replace('hover:text-paper', 'hover:text-ink')} aria-label="次へ">→</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 進み具合バー -->
+        <div class="relative h-px bg-sumi mb-10">
+          <div data-progress class="absolute left-0 top-0 h-[3px] -mt-px bg-gold w-0"></div>
+        </div>
+
+        <ol data-track class="track gap-6 md:gap-10" tabindex="0" aria-label="活動歴">
+          {history.map((h) => (
+            <li data-date={h.date} class="w-[78%] sm:w-[45%] md:w-[30%]">
+              <p class="font-serif-en text-3xl md:text-4xl text-gold mb-3">{h.date}</p>
+              <h3 class="font-mincho text-lg leading-snug mb-2">{h.title}</h3>
+              <p class="text-sm text-line/80 leading-relaxed">{h.desc}</p>
+            </li>
+          ))}
+          <li data-spacer aria-hidden="true" class="w-[calc(22%-1.5rem)] sm:hidden"></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- WORKS：カルーセル -->
+    <section id="works" class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24" data-carousel>
+      <div class="flex items-end justify-between gap-6 mb-10">
+        <div class="flex items-baseline gap-4">
+          <h2 class="font-serif-en text-4xl md:text-5xl tracking-[0.15em]">WORKS</h2>
+          <span class="font-mincho text-sm text-mute">運営サイト</span>
+        </div>
+        <div class="flex gap-2">
+          <button type="button" data-prev class={arrowBtn} aria-label="前へ">←</button>
+          <button type="button" data-next class={arrowBtn} aria-label="次へ">→</button>
+        </div>
+      </div>
+
+      <ul data-track class="track gap-4 md:gap-6" tabindex="0" aria-label="運営サイト">
+        {works.map((w, i) => (
+          <li class="w-[85%] sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)]">
+            <a href={w.href} target="_blank" rel="noopener" class="group flex flex-col h-full border border-line bg-white p-6 hover:border-ink transition-colors">
+              <div class="flex justify-between items-start mb-6">
+                <span class="font-serif-en text-sm text-gold">{String(i + 1).padStart(2, '0')}</span>
+                <span class="text-mute group-hover:text-ink group-hover:translate-x-1 transition-all" aria-hidden="true">↗</span>
+              </div>
+              <div class="h-20 flex items-center justify-center mb-6">
+                <img src={w.logo.src} alt="" class="max-h-16 max-w-[80%] w-auto">
+              </div>
+              <h3 class="font-mincho text-lg mb-1">{w.name}</h3>
+              <p class="text-sm text-sumi">{w.desc}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- GEAR：タブ切り替え -->
+    <section id="gear" class="border-t border-line">
+      <div class="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24 grid grid-cols-[minmax(0,1fr)] md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-8 md:gap-14">
+        <div>
+          <div class="flex items-baseline gap-4 mb-6">
+            <h2 class="font-serif-en text-4xl md:text-5xl tracking-[0.15em]">GEAR</h2>
+            <span class="font-mincho text-sm text-mute">使用機材</span>
+          </div>
+          <div class="flex border border-ink w-fit" role="tablist" data-tabs>
+            {gear.map((g, i) => (
+              <button type="button" role="tab" data-tab={g.id} aria-selected={i === 0 ? 'true' : 'false'} class="px-5 py-2 font-mincho text-sm text-ink aria-selected:bg-ink aria-selected:text-paper transition-colors">{g.title}</button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          {gear.map((g, i) => (
+            <dl data-panel={g.id} role="tabpanel" hidden={i !== 0} class="border-t border-ink">
+              {g.items.map((item) => (
+                <div class="grid grid-cols-[7rem_1fr] md:grid-cols-[8rem_1fr] gap-4 py-3 border-b border-line text-sm">
+                  <dt class="text-mute">{item.label}</dt>
+                  <dd>{item.value}</dd>
+                </div>
+              ))}
+            </dl>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-ink text-paper">
+    <div class="max-w-6xl mx-auto px-4 md:px-8 py-12 flex flex-col md:flex-row gap-6 md:items-center md:justify-between">
+      <p class="font-serif-en text-xl tracking-[0.3em]">MIYANO YAMI</p>
+      <ul class="flex gap-6 font-serif-en text-sm tracking-[0.2em]">
+        {links.map((l) => (
+          <li><a href={l.href} target={l.internal ? undefined : '_blank'} rel={l.internal ? undefined : 'noopener'} class="hover:text-gold transition-colors">{l.label.toUpperCase()}</a></li>
+        ))}
+      </ul>
+      <p class="text-xs text-mute">&copy; 宮乃やみ all rights reserved.</p>
+    </div>
+  </footer>
+
+  <script define:vars={{ mainImageSrc: mainImage.src, mainImage2Src: mainImage2.src }}>
+    // 立ち絵の切り替え（PC：ホバー／スマホ：タップ）
     const characterImage = document.getElementById('character-image');
     const images = [mainImageSrc, mainImage2Src];
-    let currentIndex = 0;
+    new Image().src = mainImage2Src;
+    let current = 0;
+    let lastPointer = 'mouse';
+    const show = (i) => { current = i; characterImage.src = images[i]; };
+    characterImage.addEventListener('pointerenter', (e) => { lastPointer = e.pointerType; if (e.pointerType === 'mouse') show(1); });
+    characterImage.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') show(0); });
+    characterImage.addEventListener('click', () => { if (lastPointer !== 'mouse') show((current + 1) % images.length); });
 
-    // PC用：マウスホバー
-    characterImage.addEventListener('mouseenter', () => {
-        currentIndex = (currentIndex + 1) % images.length;
-        characterImage.src = images[currentIndex];
+    // 横スクロール（カルーセル・年表）
+    const smooth = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    document.querySelectorAll('[data-carousel]').forEach((root) => {
+      const track = root.querySelector('[data-track]');
+      const items = [...track.children].filter((el) => !el.hasAttribute('data-spacer'));
+      const prevs = root.querySelectorAll('[data-prev]');
+      const nexts = root.querySelectorAll('[data-next]');
+      const dots = root.querySelectorAll('[data-dot]');
+      const years = root.querySelectorAll('[data-year]');
+      const counter = root.querySelector('[data-current]');
+      const progress = root.querySelector('[data-progress]');
+
+      const offsetOf = (el) => el.offsetLeft - track.offsetLeft;
+      const indexNow = () => {
+        let best = 0;
+        items.forEach((el, i) => { if (Math.abs(offsetOf(el) - track.scrollLeft) < Math.abs(offsetOf(items[best]) - track.scrollLeft)) best = i; });
+        return best;
+      };
+      const goTo = (i) => {
+        const target = items[Math.max(0, Math.min(items.length - 1, i))];
+        track.scrollTo({ left: offsetOf(target), behavior: smooth });
+      };
+
+      const update = () => {
+        const max = track.scrollWidth - track.clientWidth;
+        const i = track.scrollLeft >= max - 2 ? items.length - 1 : indexNow();
+        prevs.forEach((b) => (b.disabled = track.scrollLeft <= 2));
+        nexts.forEach((b) => (b.disabled = track.scrollLeft >= max - 2));
+        dots.forEach((d, j) => d.setAttribute('aria-selected', String(j === i)));
+        if (counter) counter.textContent = String(i + 1).padStart(2, '0');
+        if (progress) progress.style.width = (max > 0 ? (track.scrollLeft / max) * 100 : 100) + '%';
+        if (years.length) {
+          const y = items[i].dataset.date.slice(0, 4);
+          years.forEach((b) => b.toggleAttribute('data-active', b.dataset.year === y));
+        }
+      };
+
+      prevs.forEach((b) => b.addEventListener('click', () => goTo(indexNow() - 1)));
+      nexts.forEach((b) => b.addEventListener('click', () => goTo(indexNow() + 1)));
+      dots.forEach((d) => d.addEventListener('click', () => goTo(Number(d.dataset.dot))));
+      years.forEach((b) => b.addEventListener('click', () => goTo(items.findIndex((el) => el.dataset.date.startsWith(b.dataset.year)))));
+      track.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+      track.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') { e.preventDefault(); goTo(indexNow() + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(indexNow() - 1); }
+      });
+      window.addEventListener('resize', update);
+
+      if (root.dataset.start === 'end') track.scrollLeft = Math.min(offsetOf(items[items.length - 1]), track.scrollWidth);
+      update();
     });
 
-    characterImage.addEventListener('mouseleave', () => {
-        characterImage.src = images[0];
-        currentIndex = 0;
-    });
-    
-    // スマホ・タブレット用：タップ
-    characterImage.addEventListener('touchstart', (e) => {
-        e.preventDefault(); // デフォルトのタッチ動作を防ぐ
-        currentIndex = (currentIndex + 1) % images.length;
-        characterImage.src = images[currentIndex];
-    });
-    
-    // スマホ・タブレット用：タップ終了で元に戻す
-    characterImage.addEventListener('touchend', () => {
-        setTimeout(() => {
-            characterImage.src = images[0];
-            currentIndex = 0;
-        }, 1000); // 1秒後に元の画像に戻す
+    // タブ（機材）
+    document.querySelectorAll('[data-tabs]').forEach((list) => {
+      const tabs = list.querySelectorAll('[data-tab]');
+      tabs.forEach((tab) => tab.addEventListener('click', () => {
+        tabs.forEach((t) => {
+          const on = t === tab;
+          t.setAttribute('aria-selected', String(on));
+          document.querySelector(`[data-panel="${t.dataset.tab}"]`).hidden = !on;
+        });
+      }));
     });
   </script>
 </body>
 </html>
-
